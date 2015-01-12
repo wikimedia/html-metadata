@@ -11,7 +11,8 @@ var async = require('async'),
 // Default exported function
 exports = module.exports = function(urlOrOpts, callback){
 	request(urlOrOpts, function(error, response, html){
-		exports.scrapeAll(html, function(err, results){
+		$ = cheerio.load(html);
+		exports.scrapeAll($, function(err, results){
 			callback(err, results);
 		});
 	});
@@ -26,7 +27,7 @@ exports = module.exports = function(urlOrOpts, callback){
  *
  * Currently only openGraph data as this is the only one implemented
  *
- * @param  {Object}   html     html object to scrape
+ * @param  {Object}   html     html Cheerio object to scrape
  * @param  {Function} callback callback(error, mergedObject)
  */
 exports.scrapeAllMerged = function(html, callback){
@@ -62,7 +63,7 @@ exports.scrapeAllMerged = function(html, callback){
  *
  * Currently only openGraph data as this is the only one implemented
  *
- * @param  {Object}   html     html object to scrape
+ * @param  {Object}   html     html Cheerio object to scrape
  * @param  {Function} callback callback(error, allMetadata)
  */
 exports.scrapeAll = function(html, callback){
@@ -110,7 +111,7 @@ exports.scrapeHighWire = function(html, callback){
 
 /**
  * Scrapes OpenGraph data given html object
- * @param  {Object}   html     html object
+ * @param  {Object}   html     html Cheerio object
  * @param  {Function} callback callback(openGraphDataObject)
  */
 exports.scrapeOpenGraph = function(html, callback){
