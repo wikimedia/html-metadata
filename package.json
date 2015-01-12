@@ -14,12 +14,12 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/mvolz/node-metadata.git"
+		"url": "https://github.com/mvolz/html-metadata.git"
 	},
 	"author": "Marielle Volz <marielle.volz@gmail.com>",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/mvolz/node-metadata/issues"
+		"url": "https://github.com/mvolz/html-metadata/issues"
 	},
-	"homepage": "https://github.com/mvolz/node-metadata"
+	"homepage": "https://github.com/mvolz/html-metadata"
 }
