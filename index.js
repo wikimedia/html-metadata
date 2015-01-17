@@ -46,7 +46,11 @@ exports.scrapeAllMerged = function(html, callback){
 					if (!superResults){
 						superResults = [];
 					}
-					superResults.push(value);
+					if (value instanceof Array) {
+						superResults = superResults.concat(value);
+					} else {
+						superResults.push(value);
+					}
 					allMetadata[key] = superResults;
 				}
 			}
@@ -94,9 +98,46 @@ exports.scrapeCOinS = function(html, callback){
 	callback(null);
 };
 
-// TODO
+/**
+ * Scrapes Dublin Core data given html object
+ * @param  {Object}   html     html Cheerio object
+ * @param  {Function} callback callback(dublinCoreDataObject)
+ */
 exports.scrapeDublinCore = function(html, callback){
-	callback(null);
+	var meta = {},
+		metaTags = $('meta,link');
+
+	metaTags.each(function() {
+		var element = $(this),
+			isLink = this.name === 'link',
+			nameAttr = element.attr(isLink ? 'rel' : 'name');
+
+		// If the element isn't a Dublin Core property, skip it
+		if (!nameAttr
+			|| (nameAttr.substring(0, 3).toUpperCase() !== 'DC.'
+				&& nameAttr.substring(0, 8).toUpperCase() !== 'DCTERMS.')) {
+			return;
+		}
+
+		var property = nameAttr.substring(nameAttr.lastIndexOf('.') + 1),
+			content = element.attr(isLink ? 'href' : 'content');
+
+		// Lowercase the first character
+		property = property.charAt(0).toLowerCase() + property.substr(1);
+
+		// If the property already exists, make the array of contents
+		if (meta[property]) {
+			if (meta[property] instanceof Array) {
+				meta[property].push(content)
+			} else {
+				meta[property] = [meta[property], content];
+			}
+		} else {
+			meta[property] = content;
+		}
+	});
+
+	callback(meta);
 };
 
 // TODO
@@ -125,7 +166,7 @@ exports.scrapeOpenGraph = function(html, callback){
  */
 exports.metadataFunctions = {
 	//'coins': exports.scrapeCOinS,
-	//'dublin-core': exports.scrapeDublinCore,
+	'dublin-core': exports.scrapeDublinCore,
 	//'embedded-rdf':exports.scrapeEmbeddedRDF,
 	//'high-wire': exports.scrapeHighWire,
 	'open-graph': exports.scrapeOpenGraph
