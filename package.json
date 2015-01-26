@@ -6,6 +6,7 @@
 	"dependencies": {
 		"async": "0.9.0",
 		"cheerio" : "0.18.0",
+		"microdata-node" : "0.1.2",
 		"open-graph" : "git://github.com/mvolz/node-open-graph.git",
 		"request" : "2.49.0"
 	},
