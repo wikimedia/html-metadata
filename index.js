@@ -6,13 +6,14 @@
 var async = require('async'),
 	cheerio = require('cheerio'),
 	request = require('request'),
-	parseOG = require('open-graph').parse;
+	microdata = require('microdata-node'),
+	og = require('open-graph').parse;
 
 // Default exported function
 exports = module.exports = function(urlOrOpts, callback){
 	request(urlOrOpts, function(error, response, html){
-		$ = cheerio.load(html);
-		exports.scrapeAll($, function(err, results){
+		chtml = cheerio.load(html);
+		exports.parseAll(chtml, function(err, results){
 			callback(err, results);
 		});
 	});
@@ -25,33 +26,34 @@ exports = module.exports = function(urlOrOpts, callback){
  * multiple metadata types exist and both contain a parameter
  * called 'title')
  *
- * Currently only openGraph data as this is the only one implemented
- *
- * @param  {Object}   html     html Cheerio object to scrape
+ * @param  {Object}   chtml     html Cheerio object to parse
  * @param  {Function} callback callback(error, mergedObject)
  */
-exports.scrapeAllMerged = function(html, callback){
-	var fcn, results, superResults, value,
+exports.parseAllMerged = function(chtml, callback){
+	var fcn, results, merged,
 		allMetadata = {},
 		metadataFunctions = exports.metadataFunctions;
 
-	async.forEach(Object.keys(metadataFunctions), function (key, cb){
+	async.eachSeries(Object.keys(metadataFunctions), function (key, cb){
 		fcn = metadataFunctions[key];
-		fcn(html, function(results){
+		fcn(chtml, function(results){
 			if (results){
-				//merge results into larger object
+				// Merge results into larger object
 				for (var key in results){
-					superResults = allMetadata[key];
+					merged = allMetadata[key];
 					value = results[key];
-					if (!superResults){
-						superResults = [];
+
+					if (!merged){
+						merged = [];
 					}
+
 					if (value instanceof Array) {
-						superResults = superResults.concat(value);
+						merged = merged.concat(value);
 					} else {
-						superResults.push(value);
+						merged.push(value);
 					}
-					allMetadata[key] = superResults;
+
+					allMetadata[key] = merged;
 				}
 			}
 		});
@@ -67,17 +69,17 @@ exports.scrapeAllMerged = function(html, callback){
  *
  * Currently only openGraph data as this is the only one implemented
  *
- * @param  {Object}   html     html Cheerio object to scrape
+ * @param  {Object}   chtml     html Cheerio object to parse
  * @param  {Function} callback callback(error, allMetadata)
  */
-exports.scrapeAll = function(html, callback){
+exports.parseAll = function(chtml, callback){
 	var fcn,
 		allMetadata = {},
 		metadataFunctions = exports.metadataFunctions;
 
 	async.forEach(Object.keys(metadataFunctions), function (key, cb){
 		fcn = metadataFunctions[key];
-		fcn(html, function(results){
+		fcn(chtml, function(results){
 			//add results keyed by metadataFunctions name
 			if (results){
 				allMetadata[key] = results;
@@ -89,26 +91,17 @@ exports.scrapeAll = function(html, callback){
 	});
 };
 
-exports.scrapeType = function(metadataType, html, callback){
-	callback(metadataFunctions[metadataType]);
-};
-
-// TODO
-exports.scrapeCOinS = function(html, callback){
-	callback(null);
-};
-
 /**
- * Scrapes Dublin Core data given html object
- * @param  {Object}   html     html Cheerio object
+ * Scrapes Dublin Core data given Cheerio loaded html object
+ * @param  {Object}   chtml     html Cheerio object
  * @param  {Function} callback callback(dublinCoreDataObject)
  */
-exports.scrapeDublinCore = function(html, callback){
+exports.parseDublinCore = function(chtml, callback){
 	var meta = {},
-		metaTags = $('meta,link');
+		metaTags = chtml('meta,link');
 
 	metaTags.each(function() {
-		var element = $(this),
+		var element = chtml(this),
 			isLink = this.name === 'link',
 			nameAttr = element.attr(isLink ? 'rel' : 'name');
 
@@ -128,7 +121,7 @@ exports.scrapeDublinCore = function(html, callback){
 		// If the property already exists, make the array of contents
 		if (meta[property]) {
 			if (meta[property] instanceof Array) {
-				meta[property].push(content)
+				meta[property].push(content);
 			} else {
 				meta[property] = [meta[property], content];
 			}
@@ -140,24 +133,22 @@ exports.scrapeDublinCore = function(html, callback){
 	callback(meta);
 };
 
-// TODO
-exports.scrapeEmbeddedRDF = function(html, callback){
-	callback(null);
-};
-
-// TODO
-exports.scrapeHighWire = function(html, callback){
-	callback(null);
+/**
+ * Scrapes OpenGraph data given html object
+ * @param  {Object}   chtml     html Cheerio object
+ * @param  {Function} callback callback(openGraphDataObject)
+ */
+exports.parseOpenGraph = function(chtml, callback){
+	callback(og(chtml));
 };
 
 /**
- * Scrapes OpenGraph data given html object
- * @param  {Object}   html     html Cheerio object
- * @param  {Function} callback callback(openGraphDataObject)
+ * Scrapes schema.org microdata given Cheerio loaded html object
+ * @param  {Object}   chtml    Cheerio object with html loaded
+ * @param  {Function} callback callback(microdataObject)
  */
-exports.scrapeOpenGraph = function(html, callback){
-	var ogData = parseOG(html);
-	callback(ogData);
+exports.parseSchemaOrgMicrodata = function(chtml,callback){
+	callback(microdata.parse(chtml));
 };
 
 /**
@@ -165,11 +156,9 @@ exports.scrapeOpenGraph = function(html, callback){
  * @type {Object}
  */
 exports.metadataFunctions = {
-	//'coins': exports.scrapeCOinS,
-	'dublin-core': exports.scrapeDublinCore,
-	//'embedded-rdf':exports.scrapeEmbeddedRDF,
-	//'high-wire': exports.scrapeHighWire,
-	'open-graph': exports.scrapeOpenGraph
+	'dublinCore': exports.parseDublinCore,
+	'schemaOrg': exports.parseSchemaOrgMicrodata,
+	'openGraph': exports.parseOpenGraph
 };
 
 /*
@@ -184,7 +173,7 @@ exports.version = require('./package').version;
 
 if (require.main === module) {
 	var scrape = exports,
-		sampleUrl = 'http://facebook.com',
+		sampleUrl = 'http://blog.woorank.com/2013/04/dublin-core-metadata-for-seo-and-usability/',
 		opts = {
 			url: sampleUrl,
 			followAllRedirects: false,
