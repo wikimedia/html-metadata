@@ -94,7 +94,7 @@ exports.parseAll = function(chtml, callback){
 /**
  * Scrapes Dublin Core data given Cheerio loaded html object
  * @param  {Object}   chtml     html Cheerio object
- * @param  {Function} callback callback(dublinCoreDataObject)
+ * @param  {Function} callback  callback(dublinCoreDataObject)
  */
 exports.parseDublinCore = function(chtml, callback){
 	var meta = {},
@@ -134,6 +134,25 @@ exports.parseDublinCore = function(chtml, callback){
 };
 
 /**
+ * Scrapes general metadata terms given Cheerio loaded html object
+ * @param  {Object}   chtml     html Cheerio object
+ * @param  {Function} callback callback(generalObjectTerms)
+ */
+exports.parseGeneral = function(chtml, callback){
+	var meta = {
+		author: chtml('meta[name=author]').first().attr('content'), //author <meta name="author" content="">
+		authorlink: chtml('link[rel=author]').first().attr('href'), //author link <link rel="author" href="">
+		canonical: chtml('link[rel=canonical]').first().attr('href'), //canonical link <link rel="canonical" href="">
+		description: chtml('meta[name=description]').attr('content'), //meta description <meta name ="description" content="">
+		publisher: chtml('link[rel=publisher]').first().attr('href'), //publisher link <link rel="publisher" href="">
+		robots: chtml('meta[name=robots]').first().attr('content'), //robots <meta name ="robots" content="">
+		shortlink: chtml('link[rel=shortlink]').first().attr('href'), //short link <link rel="shortlink" href="">
+		title: chtml('title').first().text(), //title tag <title>
+	};
+	callback(meta);
+};
+
+/**
  * Scrapes OpenGraph data given html object
  * @param  {Object}   chtml     html Cheerio object
  * @param  {Function} callback callback(openGraphDataObject)
@@ -157,6 +176,7 @@ exports.parseSchemaOrgMicrodata = function(chtml,callback){
  */
 exports.metadataFunctions = {
 	'dublinCore': exports.parseDublinCore,
+	'general': exports.parseGeneral,
 	'schemaOrg': exports.parseSchemaOrgMicrodata,
 	'openGraph': exports.parseOpenGraph
 };
