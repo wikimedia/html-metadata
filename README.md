@@ -3,11 +3,11 @@ html-metadata
 
 # MetaData html scraper and parser for Node.js
 
-The aim of this library is to be a comprehensive source for extracting all html embedded metadata. Currently it supports Open Graph and Schema.org microdata using third party libraries, and a native Dublin Core implementation.
+The aim of this library is to be a comprehensive source for extracting all html embedded metadata. Currently it supports Open Graph and Schema.org microdata using third party libraries, a native Dublin Core implementation, and some general metadata that doesn't belong to a particular standard (for instance, the content of the title tag, or meta description tags).
 
-Planned is support for twitter, AGLS, eprints, highwire, BEPress and other yet unheard of metadata types. Contributions and requests for other metadata types welcome!
+Planned is support for  RDFa , twitter, AGLS, eprints, highwire, BEPress and other yet unheard of metadata types. Contributions and requests for other metadata types welcome!
 
-Longterm goals include support for linked-to embedded RDF.
+Longterm goals include support for linked-to  RDF.
 
 ## Install
 
@@ -25,7 +25,7 @@ scrape(url, function(err, meta){
 })
 ```
 
-The scrape method used here invokes the parseAll() method, which uses all the available methods registered in method metadataFunctions, and are available for use separately as well, for example:
+The scrape method used here invokes the parseAll() method, which uses all the available methods registered in method metadataFunctions(), and are available for use separately as well, for example:
 
 ```js
 var cheerio = require('cheerio');
@@ -40,4 +40,17 @@ request(url, function(error, response, html){
 		callback(err, results);
 	});
 });
+```
+
+The method parseGeneral obtains the following general metadata:
+
+```html
+<meta name="author" content="">
+<link rel="author" href="">
+<link rel="canonical" href="">
+<meta name ="description" content="">
+<link rel="publisher" href="">
+<meta name ="robots" content="">
+<link rel="shortlink" href="">
+<title></title>
 ```
