@@ -18,7 +18,7 @@
 		"url": "https://github.com/mvolz/html-metadata.git"
 	},
 	"author": "Marielle Volz <marielle.volz@gmail.com>",
-	"license": "ISC",
+	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/mvolz/html-metadata/issues"
 	},
