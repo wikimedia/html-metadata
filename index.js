@@ -158,8 +158,73 @@ exports.parseGeneral = function(chtml, callback){
  * @param  {Function} callback callback(openGraphDataObject)
  */
 exports.parseOpenGraph = function(chtml, callback){
-	callback(og(chtml));
+	var element, itemType, propertyValue, property, root, node,
+		meta = {},
+		metaTags = chtml('meta'),
+		namespace = ['og','fb'],
+		subProperty = {
+			image : 'url',
+			video : 'url',
+			audio : 'url'
+		};
+
+	metaTags.each(function() {
+		element = chtml(this);
+		propertyValue = element.attr('property');
+
+		if (!propertyValue){
+			return;
+		} else {
+			propertyValue = propertyValue.toLowerCase().split(':');
+		}
+
+		// If the element isn't in namespace, exit
+		if (!typeof namespace.indexOf(propertyValue[0]) === 'number'){return; }
+
+		content = element.attr('content');
+
+		if (propertyValue.length === 2){
+			property = propertyValue[1]; // Set property to value after namespace
+			if (property in subProperty){ // If one of image,video,audio
+				node = {};
+				node[subProperty[property]] = content;
+				root = node; // Set as potential root
+			} else {
+				node = content;
+				root = false; // Clear root- subproperties must occur directly after root tag is declared
+			}
+			// If the property already exists, make the array of contents
+			if (meta[property]) {
+				if (meta[property] instanceof Array) {
+					meta[property].push(node);
+				} else {
+					meta[property] = [meta[property], node];
+				}
+			} else {
+				meta[property] = node;
+			}
+		} else if (propertyValue.length === 3){ // Property part of a verticle
+			if (root){ // If root exists, add properties to root
+				property = propertyValue[2];
+				root[property] = content; // If multiple tags present, overwrites previous one. These should be unique.
+			}
+		} else {
+			return; // Discard values with length <2 and >3 as invalid
+		}
+
+		// Check for "type" property and add to namespace if so
+		// If any of these type occur in order before the type attribute is defined,
+		// they'll be skipped; spec requires they be placed below type definition.
+		// For nested types (e.g. video.movie) the OG protocol uses the super type
+		// (e.g. movie) as the new namespace.
+		if (property === 'type'){
+			namespace.push(content.split('.')[0]); // Add the type to the acceptable namespace list
+		}
+	});
+
+	callback(meta);
 };
+
 
 /**
  * Scrapes schema.org microdata given Cheerio loaded html object
@@ -192,15 +257,12 @@ exports.version = require('./package').version;
  */
 
 if (require.main === module) {
-	var scrape = exports,
-		sampleUrl = 'http://blog.woorank.com/2013/04/dublin-core-metadata-for-seo-and-usability/',
-		opts = {
-			url: sampleUrl,
-			followAllRedirects: false,
-			headers: {'user-agent': 'Mozilla/5.0'}
-		};
-	console.log('Scrape function running on sample url: '+ sampleUrl);
-	scrape(opts, function(error, results){
-		console.log(results);
+	var fs = require('fs'),
+		scrape = exports;
+
+	console.log('Parser running on test file');
+	$ = cheerio.load(fs.readFileSync('./test_files/turtles.html'));
+	exports.parseAll($, function(err, results){
+		console.log(JSON.stringify(results));
 	});
 }
