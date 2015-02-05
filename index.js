@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * https://github.com/mvolz/node-metadata
+ * https://github.com/wikimedia/html-metadata
  */
 
 var async = require('async'),
