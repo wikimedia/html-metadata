@@ -261,7 +261,7 @@ if (require.main === module) {
 		scrape = exports;
 
 	console.log('Parser running on test file');
-	$ = cheerio.load(fs.readFileSync('./test_files/turtles.html'));
+	$ = cheerio.load(fs.readFileSync('./test_files/turtle_movie.html'));
 	exports.parseAll($, function(err, results){
 		console.log(JSON.stringify(results));
 	});
