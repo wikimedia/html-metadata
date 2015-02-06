@@ -3,11 +3,9 @@ html-metadata
 
 # MetaData html scraper and parser for Node.js
 
-The aim of this library is to be a comprehensive source for extracting all html embedded metadata. Currently it supports Open Graph and Schema.org microdata using third party libraries, a native Dublin Core implementation, and some general metadata that doesn't belong to a particular standard (for instance, the content of the title tag, or meta description tags).
+The aim of this library is to be a comprehensive source for extracting all html embedded metadata. Currently it supports Schema.org microdata using third party libraries, a native Dublin Core and Open Graph implementation, and some general metadata that doesn't belong to a particular standard (for instance, the content of the title tag, or meta description tags).
 
 Planned is support for  RDFa , twitter, AGLS, eprints, highwire, BEPress and other yet unheard of metadata types. Contributions and requests for other metadata types welcome!
-
-Longterm goals include support for linked-to  RDF.
 
 ## Install
 
@@ -37,7 +35,7 @@ var url = "http://blog.woorank.com/2013/04/dublin-core-metadata-for-seo-and-usab
 request(url, function(error, response, html){
 	$ = cheerio.load(html);
 	dublinCore($, function(err, results){
-		callback(err, results);
+		console.log(results);
 	});
 });
 ```
