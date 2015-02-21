@@ -6,8 +6,7 @@
 var async = require('async'),
 	cheerio = require('cheerio'),
 	request = require('request'),
-	microdata = require('microdata-node'),
-	og = require('open-graph').parse;
+	microdata = require('microdata-node');
 
 // Default exported function
 exports = module.exports = function(urlOrOpts, callback){
