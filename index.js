@@ -3,6 +3,8 @@
  * https://github.com/wikimedia/html-metadata
  */
 
+'use strict';
+
 var async = require('async'),
 	cheerio = require('cheerio'),
 	request = require('request'),
@@ -11,7 +13,7 @@ var async = require('async'),
 // Default exported function
 exports = module.exports = function(urlOrOpts, callback){
 	request(urlOrOpts, function(error, response, html){
-		chtml = cheerio.load(html);
+		var chtml = cheerio.load(html);
 		exports.parseAll(chtml, function(err, results){
 			callback(err, results);
 		});
@@ -40,7 +42,7 @@ exports.parseAllMerged = function(chtml, callback){
 				// Merge results into larger object
 				for (var key in results){
 					merged = allMetadata[key];
-					value = results[key];
+					var value = results[key];
 
 					if (!merged){
 						merged = [];
@@ -178,9 +180,9 @@ exports.parseOpenGraph = function(chtml, callback){
 		}
 
 		// If the element isn't in namespace, exit
-		if (!typeof namespace.indexOf(propertyValue[0]) === 'number'){return; }
+		if (typeof namespace.indexOf(propertyValue[0]) !== 'number'){return; }
 
-		content = element.attr('content');
+		var content = element.attr('content');
 
 		if (propertyValue.length === 2){
 			property = propertyValue[1]; // Set property to value after namespace
@@ -260,7 +262,7 @@ if (require.main === module) {
 		scrape = exports;
 
 	console.log('Parser running on test file');
-	$ = cheerio.load(fs.readFileSync('./test_files/turtle_movie.html'));
+	var $ = cheerio.load(fs.readFileSync('./test_files/turtle_movie.html'));
 	exports.parseAll($, function(err, results){
 		console.log(JSON.stringify(results));
 	});
