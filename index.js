@@ -5,99 +5,47 @@
 
 'use strict';
 
-var async = require('async'),
-	cheerio = require('cheerio'),
-	request = require('request'),
-	microdata = require('microdata-node');
+var BBPromise = require('bluebird');
+var cheerio = require('cheerio');
+var preq = require('preq');
+var microdata = require('microdata-node');
 
 // Default exported function
-exports = module.exports = function(urlOrOpts, callback){
-	request(urlOrOpts, function(error, response, html){
-		var chtml = cheerio.load(html);
-		exports.parseAll(chtml, function(err, results){
-			callback(err, results);
-		});
+exports = module.exports = function(urlOrOpts) {
+	return preq.get(urlOrOpts
+	).then(function(callRes) {
+		return BBPromise.resolve(exports.parseAll(cheerio.load(callRes.body)));
 	});
 };
 
 /**
- * Callback on Object containing all fields merged into
- * one object. The parameters key to a list which may contain
- * multiple values if multiples are found (for instance, if
- * multiple metadata types exist and both contain a parameter
- * called 'title')
- *
- * @param  {Object}   chtml     html Cheerio object to parse
- * @param  {Function} callback callback(error, mergedObject)
- */
-exports.parseAllMerged = function(chtml, callback){
-	var fcn, results, merged,
-		allMetadata = {},
-		metadataFunctions = exports.metadataFunctions;
-
-	async.eachSeries(Object.keys(metadataFunctions), function (key, cb){
-		fcn = metadataFunctions[key];
-		fcn(chtml, function(results){
-			if (results){
-				// Merge results into larger object
-				for (var key in results){
-					merged = allMetadata[key];
-					var value = results[key];
-
-					if (!merged){
-						merged = [];
-					}
-
-					if (value instanceof Array) {
-						merged = merged.concat(value);
-					} else {
-						merged.push(value);
-					}
-
-					allMetadata[key] = merged;
-				}
-			}
-		});
-		cb();
-	}, function(err) {
-		callback(err, allMetadata);
-	});
-};
-
-/**
- * Callback on Object containing all available datatypes, keyed
+ * Returns Object containing all available datatypes, keyed
  * using the same keys as in metadataFunctions.
  *
- * Currently only openGraph data as this is the only one implemented
- *
- * @param  {Object}   chtml     html Cheerio object to parse
- * @param  {Function} callback callback(error, allMetadata)
+ * @param  {Object}   chtml html Cheerio object to parse
+ * @return {Object}         contains metadata
  */
-exports.parseAll = function(chtml, callback){
-	var fcn,
-		allMetadata = {},
-		metadataFunctions = exports.metadataFunctions;
+exports.parseAll = function(chtml){
+	var fcn;
+	var meta;
+	var allMetadata = {};
+	var metadataFunctions = exports.metadataFunctions;
 
-	async.forEach(Object.keys(metadataFunctions), function (key, cb){
+	Object.keys(metadataFunctions).forEach(function(key) {
 		fcn = metadataFunctions[key];
-		fcn(chtml, function(results){
-			//add results keyed by metadataFunctions name
-			if (results){
-				allMetadata[key] = results;
-			}
-		});
-		cb();
-	}, function(err) {
-		callback(err, allMetadata);
+		meta = fcn(chtml);
+		allMetadata[key] = meta;
 	});
+
+	return allMetadata;
 };
 
 /**
  * Scrapes Dublin Core data given Cheerio loaded html object
- * @param  {Object}   chtml     html Cheerio object
- * @param  {Function} callback  callback(dublinCoreDataObject)
+ * @param  {Object}   chtml html Cheerio object
+ * @return {Object}         dc metadata
  */
-exports.parseDublinCore = function(chtml, callback){
+exports.parseDublinCore = function(chtml){
 	var meta = {},
 		metaTags = chtml('meta,link');
 
@@ -131,15 +79,15 @@ exports.parseDublinCore = function(chtml, callback){
 		}
 	});
 
-	callback(meta);
+	return meta;
 };
 
 /**
  * Scrapes general metadata terms given Cheerio loaded html object
- * @param  {Object}   chtml     html Cheerio object
- * @param  {Function} callback callback(generalObjectTerms)
+ * @param  {Object}   chtml html Cheerio object
+ * @return {Object}         object contain general metadata
  */
-exports.parseGeneral = function(chtml, callback){
+exports.parseGeneral = function(chtml){
 	var meta = {
 		author: chtml('meta[name=author]').first().attr('content'), //author <meta name="author" content="">
 		authorlink: chtml('link[rel=author]').first().attr('href'), //author link <link rel="author" href="">
@@ -150,20 +98,25 @@ exports.parseGeneral = function(chtml, callback){
 		shortlink: chtml('link[rel=shortlink]').first().attr('href'), //short link <link rel="shortlink" href="">
 		title: chtml('title').first().text(), //title tag <title>
 	};
-	callback(meta);
+	return meta;
 };
 
 /**
  * Scrapes OpenGraph data given html object
- * @param  {Object}   chtml     html Cheerio object
- * @param  {Function} callback callback(openGraphDataObject)
+ * @param  {Object}   chtml html Cheerio object
+ * @return  {Object}        open graph metadata object
  */
-exports.parseOpenGraph = function(chtml, callback){
-	var element, itemType, propertyValue, property, root, node,
-		meta = {},
-		metaTags = chtml('meta'),
-		namespace = ['og','fb'],
-		subProperty = {
+exports.parseOpenGraph = function(chtml){
+	var element;
+	var itemType;
+	var propertyValue;
+	var property;
+	var root;
+	var node;
+	var meta = {};
+	var metaTags = chtml('meta');
+	var namespace = ['og','fb'];
+	var subProperty = {
 			image : 'url',
 			video : 'url',
 			audio : 'url'
@@ -223,17 +176,18 @@ exports.parseOpenGraph = function(chtml, callback){
 		}
 	});
 
-	callback(meta);
+	return meta;
 };
 
 
 /**
  * Scrapes schema.org microdata given Cheerio loaded html object
- * @param  {Object}   chtml    Cheerio object with html loaded
- * @param  {Function} callback callback(microdataObject)
+ * @param  {Object}  chtml Cheerio object with html loaded
+ * @return {Object}        schema.org microdata object
  */
-exports.parseSchemaOrgMicrodata = function(chtml,callback){
-	callback(microdata.parse(chtml));
+exports.parseSchemaOrgMicrodata = function(chtml){
+	var meta = microdata.parse(chtml);
+	return meta;
 };
 
 /**
@@ -252,18 +206,3 @@ exports.metadataFunctions = {
 */
 
 exports.version = require('./package').version;
-
-/*
- Test from main
- */
-
-if (require.main === module) {
-	var fs = require('fs'),
-		scrape = exports;
-
-	console.log('Parser running on test file');
-	var $ = cheerio.load(fs.readFileSync('./test_files/turtle_movie.html'));
-	exports.parseAll($, function(err, results){
-		console.log(JSON.stringify(results));
-	});
-}
