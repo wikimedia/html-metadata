@@ -7,8 +7,8 @@
 
 var BBPromise = require('bluebird');
 var cheerio = require('cheerio');
-var preq = require('preq');
-var microdata = require('microdata-node');
+var preq = require('preq'); // Promisified Request library
+var microdata = require('microdata-node'); // Schema.org microdata
 
 // Default exported function
 exports = module.exports = function(urlOrOpts) {
@@ -26,28 +26,44 @@ exports = module.exports = function(urlOrOpts) {
  * @return {Object}         contains metadata
  */
 exports.parseAll = function(chtml){
-	var fcn;
-	var meta;
-	var allMetadata = {};
-	var metadataFunctions = exports.metadataFunctions;
 
-	Object.keys(metadataFunctions).forEach(function(key) {
-		fcn = metadataFunctions[key];
-		meta = fcn(chtml);
-		allMetadata[key] = meta;
+	var arr = []; // Array of promises for metadata of each type in exports.metadataFunctions
+	var keys = Object.keys(exports.metadataFunctions); // Array of keys corresponding to position of promise in arr
+	var meta = {}; // Metadata keyed by keys in exports.metadataFunctions
+	keys.forEach(function(key){
+		arr.push(exports.metadataFunctions[key](chtml)); // Call promise and push to array
 	});
 
-	return allMetadata;
+	var result; // Result in for loop over results
+	var key; // Key corrsponding to location of result
+	return BBPromise.settle(arr)
+		.then(function(results){
+			for (var r in results){
+				result = results[r];
+				key = keys[r];
+				if (result && result.isFulfilled() && result.value()) {
+					meta[key] = result.value();
+				}
+			}
+			if (Object.keys(meta).length === 0){
+				throw new Error("No metadata found in page");
+			}
+			return meta;
+		});
 };
 
 /**
  * Scrapes Dublin Core data given Cheerio loaded html object
  * @param  {Object}   chtml html Cheerio object
- * @return {Object}         dc metadata
+ * @return {Object}         promise of dc metadata
  */
-exports.parseDublinCore = function(chtml){
-	var meta = {},
-		metaTags = chtml('meta,link');
+exports.parseDublinCore = BBPromise.method(function(chtml){
+
+	var meta = {};
+	var metaTags = chtml('meta,link');
+	var reason = new Error('No openGraph metadata found in page');
+
+	if (!metaTags || metaTags.length === 0){throw reason;}
 
 	metaTags.each(function() {
 		var element = chtml(this),
@@ -78,17 +94,20 @@ exports.parseDublinCore = function(chtml){
 			meta[property] = content;
 		}
 	});
-
+	if (Object.keys(meta).length === 0){
+		throw reason;
+	}
 	return meta;
-};
+});
 
 /**
  * Scrapes general metadata terms given Cheerio loaded html object
  * @param  {Object}   chtml html Cheerio object
  * @return {Object}         object contain general metadata
  */
-exports.parseGeneral = function(chtml){
-	var meta = {
+exports.parseGeneral = BBPromise.method(function(chtml){
+
+	var clutteredMeta = {
 		author: chtml('meta[name=author]').first().attr('content'), //author <meta name="author" content="">
 		authorlink: chtml('link[rel=author]').first().attr('href'), //author link <link rel="author" href="">
 		canonical: chtml('link[rel=canonical]').first().attr('href'), //canonical link <link rel="canonical" href="">
@@ -98,15 +117,33 @@ exports.parseGeneral = function(chtml){
 		shortlink: chtml('link[rel=shortlink]').first().attr('href'), //short link <link rel="shortlink" href="">
 		title: chtml('title').first().text(), //title tag <title>
 	};
+
+	// Copy key-value pairs with defined values to meta
+	var meta = {};
+	var value;
+	Object.keys(clutteredMeta).forEach(function(key){
+		value = clutteredMeta[key];
+		if (value){
+			meta[key] = value;
+		}
+	});
+
+	// Reject promise if meta is empty
+	if (Object.keys(meta).length === 0){
+		throw new Error('No general metadata found in page');
+	}
+
+	// Resolve on meta
 	return meta;
-};
+});
 
 /**
  * Scrapes OpenGraph data given html object
  * @param  {Object}   chtml html Cheerio object
- * @return  {Object}        open graph metadata object
+ * @return {Object}         promise of open graph metadata object
  */
-exports.parseOpenGraph = function(chtml){
+exports.parseOpenGraph = BBPromise.method(function(chtml){
+
 	var element;
 	var itemType;
 	var propertyValue;
@@ -121,6 +158,9 @@ exports.parseOpenGraph = function(chtml){
 			video : 'url',
 			audio : 'url'
 		};
+
+	var reason = new Error('No openGraph metadata found in page');
+	if (!metaTags || metaTags.length === 0){BBPromise.reject(reason);}
 
 	metaTags.each(function() {
 		element = chtml(this);
@@ -175,23 +215,32 @@ exports.parseOpenGraph = function(chtml){
 			namespace.push(content.split('.')[0]); // Add the type to the acceptable namespace list
 		}
 	});
-
+	if (Object.keys(meta).length === 0){
+		throw reason;
+	}
 	return meta;
-};
+});
 
 
 /**
  * Scrapes schema.org microdata given Cheerio loaded html object
  * @param  {Object}  chtml Cheerio object with html loaded
- * @return {Object}        schema.org microdata object
+ * @return {Object}        promise of schema.org microdata object
  */
-exports.parseSchemaOrgMicrodata = function(chtml){
+exports.parseSchemaOrgMicrodata = BBPromise.method(function(chtml){
+	if (!chtml){
+		throw new Error('Undefined argument');
+	}
+
 	var meta = microdata.parse(chtml);
-	return meta;
-};
+	if (!meta || !meta.items || !meta.items[0]){
+		throw new Error('No schema.org metadata found in page');
+	}
+	return (meta);
+});
 
 /**
- * Global exportable list of scraping functions with string keys
+ * Global exportable list of scraping promises with string keys
  * @type {Object}
  */
 exports.metadataFunctions = {
