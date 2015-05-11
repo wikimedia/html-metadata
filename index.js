@@ -14,7 +14,7 @@ var microdata = require('microdata-node'); // Schema.org microdata
 exports = module.exports = function(urlOrOpts) {
 	return preq.get(urlOrOpts
 	).then(function(callRes) {
-		return BBPromise.resolve(exports.parseAll(cheerio.load(callRes.body)));
+		return exports.parseAll(cheerio.load(callRes.body));
 	});
 };
 
@@ -27,11 +27,11 @@ exports = module.exports = function(urlOrOpts) {
  */
 exports.parseAll = function(chtml){
 
-	var arr = []; // Array of promises for metadata of each type in exports.metadataFunctions
 	var keys = Object.keys(exports.metadataFunctions); // Array of keys corresponding to position of promise in arr
 	var meta = {}; // Metadata keyed by keys in exports.metadataFunctions
-	keys.forEach(function(key){
-		arr.push(exports.metadataFunctions[key](chtml)); // Call promise and push to array
+	// Array of promises for metadata of each type in exports.metadataFunctions
+	var arr = keys.map(function(key) {
+		return exports.metadataFunctions[key](chtml);
 	});
 
 	var result; // Result in for loop over results
@@ -48,7 +48,7 @@ exports.parseAll = function(chtml){
 			if (Object.keys(meta).length === 0){
 				throw new Error("No metadata found in page");
 			}
-			return meta;
+			return BBPromise.resolve(meta);
 		});
 };
 
@@ -160,7 +160,7 @@ exports.parseOpenGraph = BBPromise.method(function(chtml){
 		};
 
 	var reason = new Error('No openGraph metadata found in page');
-	if (!metaTags || metaTags.length === 0){BBPromise.reject(reason);}
+	if (!metaTags || metaTags.length === 0){ throw reason; }
 
 	metaTags.each(function() {
 		element = chtml(this);
@@ -236,7 +236,7 @@ exports.parseSchemaOrgMicrodata = BBPromise.method(function(chtml){
 	if (!meta || !meta.items || !meta.items[0]){
 		throw new Error('No schema.org metadata found in page');
 	}
-	return (meta);
+	return meta;
 });
 
 /**

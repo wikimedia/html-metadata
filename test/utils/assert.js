@@ -50,6 +50,9 @@ function notDeepEqual(result, expected, message) {
 function fails(promise, onRejected) {
 
 	var failed = false;
+	if (!onRejected) {
+		onRejected = function() {};
+	}
 
 	function trackFailure(e) {
 		failed = true;

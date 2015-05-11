@@ -17,14 +17,8 @@ var cheerio = require('cheerio');
 describe('scraping', function() {
 	var url;
 
-	function onRejected(e){
-		throw e;
-	}
-
-	//TODO: Fix test
-	//Unhandled rejection TypeError: undefined is not a function
 	it('should get OpenGraph info', function() {
-		url = 'http://fortune.com/2015/02/20/nobel-prize-economics-for-sale/';
+		var url = 'http://fortune.com/2015/02/20/nobel-prize-economics-for-sale/';
 		return meta(url)
 		.catch(function(e){throw e;})
 		.then(function(res) {
@@ -46,14 +40,13 @@ describe('scraping', function() {
 		return assert.ok(meta(url));
 	});
 
-	//TODO: Unhandled rejection error
 	it('should get schema.org microdata', function() {
-		url = 'http://blog.schema.org/';
+		var url = 'http://blog.schema.org/';
 		return preq.get(url).then(function(callRes) {
 			var expected = '{"items":[{"type":["http://schema.org/Blog"],"properties":{"name":["schema blog"]}}]}';
-			var $ = cheerio.load(callRes.body);
-			var prom = meta.parseSchemaOrgMicrodata($);
-			return prom.then(function(results){
+			var chtml = cheerio.load(callRes.body);
+			return meta.parseSchemaOrgMicrodata(chtml)
+			.then(function(results){
 				assert.deepEqual(JSON.stringify(results), expected);
 			});
 		});
