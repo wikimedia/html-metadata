@@ -1,39 +1,39 @@
 {
-  "name": "html-metadata",
-  "version": "0.1.1",
-  "description": "Scrapes metadata of several different standards",
-  "main": "index.js",
-  "dependencies": {
-    "async": "0.9.0",
-    "cheerio": "0.18.0",
-    "microdata-node": "0.1.2",
-    "request": "2.49.0"
-  },
-  "devDependencies": {
-    "mocha": "~1.x.x",
-    "mocha-jshint": "0.0.9",
-    "istanbul": "0.3.5",
-    "mocha-lcov-reporter": "0.0.1"
-  },
-  "scripts": {
-    "test": "mocha",
-    "coverage": "istanbul cover _mocha -- -R spec"
-  },
-  "keywords": [
-    "open graph",
-    "metadata",
-    "microdata",
-    "dublin core",
-    "web scraper"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/wikimedia/html-metadata.git"
-  },
-  "author": "Marielle Volz <marielle.volz@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/wikimedia/html-metadata/issues"
-  },
-  "homepage": "https://github.com/wikimedia/html-metadata"
+	"name": "html-metadata",
+	"version": "0.1.2",
+	"description": "Scrapes metadata of several different standards",
+	"main": "index.js",
+	"dependencies": {
+		"async": "0.9.0",
+		"cheerio" : "0.18.0",
+		"microdata-node" : "0.1.2",
+		"request" : "2.49.0"
+	},
+	"devDependencies": {
+		"mocha": "~1.x.x",
+		"mocha-jshint": "0.0.9",
+		"istanbul": "0.3.5",
+		"mocha-lcov-reporter": "0.0.1"
+	},
+	"scripts": {
+		"test": "mocha",
+		"coverage": "istanbul cover _mocha -- -R spec"
+	},
+	"keywords": [
+		"open graph",
+		"metadata",
+		"microdata",
+		"dublin core",
+		"web scraper"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/wikimedia/html-metadata.git"
+	},
+	"author": "Marielle Volz <marielle.volz@gmail.com>",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/wikimedia/html-metadata/issues"
+	},
+	"homepage": "https://github.com/wikimedia/html-metadata"
 }
