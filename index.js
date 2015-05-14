@@ -169,6 +169,9 @@ exports.parseOpenGraph = function(chtml, callback){
 			audio : 'url'
 		};
 
+	var roots = {}; // Object to store roots of different type i.e. image, audio
+	var subProp; // Current subproperty of interest
+
 	metaTags.each(function() {
 		element = chtml(this);
 		propertyValue = element.attr('property');
@@ -180,7 +183,7 @@ exports.parseOpenGraph = function(chtml, callback){
 		}
 
 		// If the element isn't in namespace, exit
-		if (namespace.indexOf(propertyValue[0]) < 0){
+		if (namespace.indexOf(propertyValue[0]) < 0){ //
 			return;
 		}
 
@@ -188,13 +191,12 @@ exports.parseOpenGraph = function(chtml, callback){
 
 		if (propertyValue.length === 2){
 			property = propertyValue[1]; // Set property to value after namespace
-			if (property in subProperty){ // If one of image,video,audio
+			if (property in subProperty){ // If has valid subproperty
 				node = {};
 				node[subProperty[property]] = content;
-				root = node; // Set as potential root
+				roots[property] = node;
 			} else {
 				node = content;
-				root = false; // Clear root- subproperties must occur directly after root tag is declared
 			}
 			// If the property already exists, make the array of contents
 			if (meta[property]) {
@@ -206,10 +208,13 @@ exports.parseOpenGraph = function(chtml, callback){
 			} else {
 				meta[property] = node;
 			}
-		} else if (propertyValue.length === 3){ // Property part of a verticle
-			if (root){ // If root exists, add properties to root
-				property = propertyValue[2];
-				root[property] = content; // If multiple tags present, overwrites previous one. These should be unique.
+		} else if (propertyValue.length === 3){ // Property part of a vertical
+			subProp = propertyValue[1]; // i.e. image, audio
+			property = propertyValue[2]; // i.e. height, width
+			// If root for subproperty exists, and there isn't already a property
+			// called that in there already i.e. height, add property and content.
+			if (roots[subProp] && !roots[subProp][property]){
+				roots[subProp][property] = content;
 			}
 		} else {
 			return; // Discard values with length <2 and >3 as invalid

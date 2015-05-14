@@ -24,15 +24,26 @@
 <meta property="og:description" content="Exposition on the awesomeness of turtles" />
 <meta property="og:url" content="http://example.com" />
 <meta property="og:site_name" content="Awesome Turtles Website" />
+<!--Image subproperty tags with no root -->
+<meta property="og:image:width" content="666" /> <!--Ignored-->
+<meta property="og:image:height" content="666" /> <!--Ignored-->
 <meta property="og:image" content="http://example.com/turtle.jpg" />
 <meta property="og:image:secure_url" content="https://secure.example.com/turtle.jpg" />
 <meta property="og:image:type" content="image/jpeg" />
 <meta property="og:image:width" content="400" />
+<meta property="og:image:width" content="666" /> <!--Ignored-->
 <meta property="og:image:height" content="300" />
 <meta property="og:image" content="http://example.com/shell.jpg" />
+<!--Interrupt image tags with audio tags-->
+<meta property="og:audio" content="http://example.com/sound.mp3" />
+<meta property="og:audio:secure_url" content="https://secure.example.com/sound.mp3" />
+<meta property="og:audio:type" content="audio/mpeg" />
+<!--End interruption with audio tags -->
 <meta property="og:image:width" content="200" />
 <meta property="og:image:height" content="150" />
-
+<!--Invalid subproperty-->
+<meta property="og:cat:meow" content="purr" /><!--Ignored-->
+<!--Article vertical-->
 <meta property="article:tag" content="turtles" />
 <meta property="article:tag" content="are" />
 <meta property="article:tag" content="awesome" />
@@ -44,6 +55,14 @@
 <meta property="article:author"  content="http://examples.com/turtlelvr" />
 <meta property="article:publisher"  content="http://mediawiki.org" />
 
+<!--AL-->
+
+<meta property="al:ios:url" content="turtle://">
+<meta property="al:ios:app_store_id" content="000">
+<meta property="al:android:url" content="turtle://">
+<meta property="al:android:package" content="superturtlearticle.androidapp">
+<meta property="al:web:url" content="http://example.com/">
+<meta property="al:web:should_fallback" content="true">
 
 <!--Twitter-->
 
