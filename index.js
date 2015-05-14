@@ -180,7 +180,9 @@ exports.parseOpenGraph = function(chtml, callback){
 		}
 
 		// If the element isn't in namespace, exit
-		if (typeof namespace.indexOf(propertyValue[0]) !== 'number'){return; }
+		if (namespace.indexOf(propertyValue[0]) < 0){
+			return;
+		}
 
 		var content = element.attr('content');
 
