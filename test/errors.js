@@ -14,36 +14,36 @@ var assert = require('./utils/assert.js');
 /* global describe, it, before, beforeEach, after, afterEach */
 
 
-//TODO: ALL BROKEN- Pass even when they shouldn't
-
 describe('errors', function() {
 
 	var url = 'http://www.example.com/';
+//	TODO: ALL BROKEN- Pass even when they shouldn't i.e. uncomment following line:
+//	var url = 'http://blog.woorank.com/2013/04/dublin-core-metadata-for-seo-and-usability/';
 
 	it('should not find schema.org metadata, reject promise', function() {
-		preq.get(url)
+		return preq.get(url)
 		.then(function(callRes) {
 			var $ = cheerio.load(callRes.body);
 			var prom = meta.parseSchemaOrgMicrodata($);
-			return assert.fails(prom);
+			assert.fails(prom);
 		});
 	});
 
 	it('should not find dublin core metadata, reject promise', function() {
-		preq.get(url)
+		return preq.get(url)
 		.then(function(callRes) {
 			var $ = cheerio.load(callRes.body);
 			var prom = meta.parseDublinCore($);
-			return assert.fails(prom);
+			assert.fails(prom);
 		});
 	});
 
 	it('should not find open graph metadata, reject promise', function() {
-		preq.get(url)
+		return preq.get(url)
 		.then(function(callRes) {
 			var $ = cheerio.load(callRes.body);
 			var prom = meta.parseOpenGraph($);
-			return assert.fails(prom);
+			assert.fails(prom);
 		});
 	});
 

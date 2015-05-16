@@ -18,9 +18,9 @@ var scrape = require('html-metadata');
 
 var url = "http://blog.woorank.com/2013/04/dublin-core-metadata-for-seo-and-usability/";
 
-scrape(url).done(function(metadata){
-	console.log(metadata);}
-	);
+scrape(url).then(function(metadata){
+	console.log(metadata);
+	});
 })
 ```
 
@@ -35,8 +35,9 @@ var url = "http://blog.woorank.com/2013/04/dublin-core-metadata-for-seo-and-usab
 
 request(url, function(error, response, html){
 	$ = cheerio.load(html);
-	console.log(dublinCore($));
-});
+	parseDublinCore($).then(function(results){
+		console.log(results);
+	});
 ```
 
 The method parseGeneral obtains the following general metadata:
