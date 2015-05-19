@@ -61,7 +61,7 @@ exports.parseDublinCore = BBPromise.method(function(chtml){
 
 	var meta = {};
 	var metaTags = chtml('meta,link');
-	var reason = new Error('No openGraph metadata found in page');
+	var reason = new Error('No Dublin Core metadata found in page');
 
 	if (!metaTags || metaTags.length === 0){throw reason;}
 
