@@ -48,10 +48,10 @@ describe('errors', function() {
 	//TODO: Add test for lacking general metadata
 	//TODO: Add test for lacking any metadata
 
-	// it('should reject promise with undefined cheerio object', function() {
-	// 	var prom = meta.parseOpenGraph(undefined);
-	// 	return assert.fails(prom);
-	// });
+	it('should reject promise with undefined cheerio object', function() {
+		var prom = meta.parseOpenGraph(undefined);
+		return assert.fails(prom);
+	});
 
 });
 
