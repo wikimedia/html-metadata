@@ -16,9 +16,8 @@ var assert = require('./utils/assert.js');
 
 describe('errors', function() {
 
-	var url = 'http://blog.woorank.com/2013/04/dublin-core-metadata-for-seo-and-usability/';
-
 	it('should not find schema.org metadata, reject promise', function() {
+		var url = 'http://blog.woorank.com/2013/04/dublin-core-metadata-for-seo-and-usability/';
 		return preq.get(url)
 		.then(function(callRes) {
 			var $ = cheerio.load(callRes.body);
@@ -28,6 +27,7 @@ describe('errors', function() {
 	});
 
 	it('should not find dublin core metadata, reject promise', function() {
+		var url = 'http://www.laprovence.com/article/actualites/3411272/marseille-un-proche-du-milieu-corse-abattu-par-balles-en-plein-jour.html';
 		return preq.get(url)
 		.then(function(callRes) {
 			var $ = cheerio.load(callRes.body);
@@ -37,6 +37,7 @@ describe('errors', function() {
 	});
 
 	it('should not find open graph metadata, reject promise', function() {
+		var url = 'http://www.sciencedirect.com/science/article/pii/S0167739X15000965';
 		return preq.get(url)
 		.then(function(callRes) {
 			var $ = cheerio.load(callRes.body);
