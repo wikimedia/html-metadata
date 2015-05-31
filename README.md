@@ -1,7 +1,7 @@
 html-metadata
 =============
 
-# MetaData html scraper and parser for Node.js
+# MetaData html scraper and parser for Node.js (promise-based)
 
 The aim of this library is to be a comprehensive source for extracting all html embedded metadata. Currently it supports Schema.org microdata using third party libraries, a native Dublin Core and Open Graph implementation, and some general metadata that doesn't belong to a particular standard (for instance, the content of the title tag, or meta description tags).
 
@@ -18,8 +18,9 @@ var scrape = require('html-metadata');
 
 var url = "http://blog.woorank.com/2013/04/dublin-core-metadata-for-seo-and-usability/";
 
-scrape(url, function(err, meta){
-	console.log(meta);
+scrape(url).then(function(metadata){
+	console.log(metadata);
+	});
 })
 ```
 
@@ -34,10 +35,9 @@ var url = "http://blog.woorank.com/2013/04/dublin-core-metadata-for-seo-and-usab
 
 request(url, function(error, response, html){
 	$ = cheerio.load(html);
-	dublinCore($, function(err, results){
+	parseDublinCore($).then(function(results){
 		console.log(results);
 	});
-});
 ```
 
 The method parseGeneral obtains the following general metadata:
@@ -52,3 +52,10 @@ The method parseGeneral obtains the following general metadata:
 <link rel="shortlink" href="">
 <title></title>
 ```
+
+## Tests
+
+```npm test``` runs the mocha tests
+
+```npm run-script coverage``` runs the tests and reports code coverage
+

@@ -1,0 +1,58 @@
+'use strict';
+
+/**
+ * Tests expecting promises to reject
+ */
+
+var cheerio = require('cheerio');
+var meta = require('../index');
+var preq = require('preq'); // Promisified Request library
+var assert = require('./utils/assert.js');
+
+
+// mocha defines to avoid JSHint breakage
+/* global describe, it, before, beforeEach, after, afterEach */
+
+
+describe('errors', function() {
+
+	it('should not find schema.org metadata, reject promise', function() {
+		var url = 'http://blog.woorank.com/2013/04/dublin-core-metadata-for-seo-and-usability/';
+		return preq.get(url)
+		.then(function(callRes) {
+			var $ = cheerio.load(callRes.body);
+			var prom = meta.parseSchemaOrgMicrodata($);
+			return assert.fails(prom);
+		});
+	});
+
+	it('should not find dublin core metadata, reject promise', function() {
+		var url = 'http://www.laprovence.com/article/actualites/3411272/marseille-un-proche-du-milieu-corse-abattu-par-balles-en-plein-jour.html';
+		return preq.get(url)
+		.then(function(callRes) {
+			var $ = cheerio.load(callRes.body);
+			var prom = meta.parseDublinCore($);
+			return assert.fails(prom);
+		});
+	});
+
+	it('should not find open graph metadata, reject promise', function() {
+		var url = 'http://www.sciencedirect.com/science/article/pii/S0167739X15000965';
+		return preq.get(url)
+		.then(function(callRes) {
+			var $ = cheerio.load(callRes.body);
+			var prom = meta.parseOpenGraph($);
+			return assert.fails(prom);
+		});
+	});
+
+	//TODO: Add test for lacking general metadata
+	//TODO: Add test for lacking any metadata
+
+	it('should reject promise with undefined cheerio object', function() {
+		var prom = meta.parseOpenGraph(undefined);
+		return assert.fails(prom);
+	});
+
+});
+

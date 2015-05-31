@@ -5,101 +5,65 @@
 
 'use strict';
 
-var async = require('async'),
-	cheerio = require('cheerio'),
-	request = require('request'),
-	microdata = require('microdata-node');
+var BBPromise = require('bluebird');
+var cheerio = require('cheerio');
+var preq = require('preq'); // Promisified Request library
+var microdata = require('microdata-node'); // Schema.org microdata
 
 // Default exported function
-exports = module.exports = function(urlOrOpts, callback){
-	request(urlOrOpts, function(error, response, html){
-		var chtml = cheerio.load(html);
-		exports.parseAll(chtml, function(err, results){
-			callback(err, results);
-		});
+exports = module.exports = function(urlOrOpts) {
+	return preq.get(urlOrOpts
+	).then(function(callRes) {
+		return exports.parseAll(cheerio.load(callRes.body));
 	});
 };
 
 /**
- * Callback on Object containing all fields merged into
- * one object. The parameters key to a list which may contain
- * multiple values if multiples are found (for instance, if
- * multiple metadata types exist and both contain a parameter
- * called 'title')
- *
- * @param  {Object}   chtml     html Cheerio object to parse
- * @param  {Function} callback callback(error, mergedObject)
- */
-exports.parseAllMerged = function(chtml, callback){
-	var fcn, results, merged,
-		allMetadata = {},
-		metadataFunctions = exports.metadataFunctions;
-
-	async.eachSeries(Object.keys(metadataFunctions), function (key, cb){
-		fcn = metadataFunctions[key];
-		fcn(chtml, function(results){
-			if (results){
-				// Merge results into larger object
-				for (var key in results){
-					merged = allMetadata[key];
-					var value = results[key];
-
-					if (!merged){
-						merged = [];
-					}
-
-					if (value instanceof Array) {
-						merged = merged.concat(value);
-					} else {
-						merged.push(value);
-					}
-
-					allMetadata[key] = merged;
-				}
-			}
-		});
-		cb();
-	}, function(err) {
-		callback(err, allMetadata);
-	});
-};
-
-/**
- * Callback on Object containing all available datatypes, keyed
+ * Returns Object containing all available datatypes, keyed
  * using the same keys as in metadataFunctions.
  *
- * Currently only openGraph data as this is the only one implemented
- *
- * @param  {Object}   chtml     html Cheerio object to parse
- * @param  {Function} callback callback(error, allMetadata)
+ * @param  {Object}   chtml html Cheerio object to parse
+ * @return {Object}         contains metadata
  */
-exports.parseAll = function(chtml, callback){
-	var fcn,
-		allMetadata = {},
-		metadataFunctions = exports.metadataFunctions;
+exports.parseAll = function(chtml){
 
-	async.forEach(Object.keys(metadataFunctions), function (key, cb){
-		fcn = metadataFunctions[key];
-		fcn(chtml, function(results){
-			//add results keyed by metadataFunctions name
-			if (results){
-				allMetadata[key] = results;
-			}
-		});
-		cb();
-	}, function(err) {
-		callback(err, allMetadata);
+	var keys = Object.keys(exports.metadataFunctions); // Array of keys corresponding to position of promise in arr
+	var meta = {}; // Metadata keyed by keys in exports.metadataFunctions
+	// Array of promises for metadata of each type in exports.metadataFunctions
+	var arr = keys.map(function(key) {
+		return exports.metadataFunctions[key](chtml);
 	});
+
+	var result; // Result in for loop over results
+	var key; // Key corrsponding to location of result
+	return BBPromise.settle(arr)
+		.then(function(results){
+			for (var r in results){
+				result = results[r];
+				key = keys[r];
+				if (result && result.isFulfilled() && result.value()) {
+					meta[key] = result.value();
+				}
+			}
+			if (Object.keys(meta).length === 0){
+				throw new Error("No metadata found in page");
+			}
+			return BBPromise.resolve(meta);
+		});
 };
 
 /**
  * Scrapes Dublin Core data given Cheerio loaded html object
- * @param  {Object}   chtml     html Cheerio object
- * @param  {Function} callback  callback(dublinCoreDataObject)
+ * @param  {Object}   chtml html Cheerio object
+ * @return {Object}         promise of dc metadata
  */
-exports.parseDublinCore = function(chtml, callback){
-	var meta = {},
-		metaTags = chtml('meta,link');
+exports.parseDublinCore = BBPromise.method(function(chtml){
+
+	var meta = {};
+	var metaTags = chtml('meta,link');
+	var reason = new Error('No Dublin Core metadata found in page');
+
+	if (!metaTags || metaTags.length === 0){throw reason;}
 
 	metaTags.each(function() {
 		var element = chtml(this),
@@ -130,17 +94,20 @@ exports.parseDublinCore = function(chtml, callback){
 			meta[property] = content;
 		}
 	});
-
-	callback(meta);
-};
+	if (Object.keys(meta).length === 0){
+		throw reason;
+	}
+	return meta;
+});
 
 /**
  * Scrapes general metadata terms given Cheerio loaded html object
- * @param  {Object}   chtml     html Cheerio object
- * @param  {Function} callback callback(generalObjectTerms)
+ * @param  {Object}   chtml html Cheerio object
+ * @return {Object}         object contain general metadata
  */
-exports.parseGeneral = function(chtml, callback){
-	var meta = {
+exports.parseGeneral = BBPromise.method(function(chtml){
+
+	var clutteredMeta = {
 		author: chtml('meta[name=author]').first().attr('content'), //author <meta name="author" content="">
 		authorlink: chtml('link[rel=author]').first().attr('href'), //author link <link rel="author" href="">
 		canonical: chtml('link[rel=canonical]').first().attr('href'), //canonical link <link rel="canonical" href="">
@@ -150,27 +117,51 @@ exports.parseGeneral = function(chtml, callback){
 		shortlink: chtml('link[rel=shortlink]').first().attr('href'), //short link <link rel="shortlink" href="">
 		title: chtml('title').first().text(), //title tag <title>
 	};
-	callback(meta);
-};
+
+	// Copy key-value pairs with defined values to meta
+	var meta = {};
+	var value;
+	Object.keys(clutteredMeta).forEach(function(key){
+		value = clutteredMeta[key];
+		if (value){
+			meta[key] = value;
+		}
+	});
+
+	// Reject promise if meta is empty
+	if (Object.keys(meta).length === 0){
+		throw new Error('No general metadata found in page');
+	}
+
+	// Resolve on meta
+	return meta;
+});
 
 /**
  * Scrapes OpenGraph data given html object
- * @param  {Object}   chtml     html Cheerio object
- * @param  {Function} callback callback(openGraphDataObject)
+ * @param  {Object}   chtml html Cheerio object
+ * @return {Object}         promise of open graph metadata object
  */
-exports.parseOpenGraph = function(chtml, callback){
-	var element, itemType, propertyValue, property, root, node,
-		meta = {},
-		metaTags = chtml('meta'),
-		namespace = ['og','fb'],
-		subProperty = {
+exports.parseOpenGraph = BBPromise.method(function(chtml){
+
+	var element;
+	var itemType;
+	var propertyValue;
+	var property;
+	var node;
+	var meta = {};
+	var metaTags = chtml('meta');
+	var namespace = ['og','fb'];
+	var subProperty = {
 			image : 'url',
 			video : 'url',
 			audio : 'url'
 		};
-
 	var roots = {}; // Object to store roots of different type i.e. image, audio
 	var subProp; // Current subproperty of interest
+	var reason = new Error('No openGraph metadata found in page');
+
+	if (!metaTags || metaTags.length === 0){ throw reason; }
 
 	metaTags.each(function() {
 		element = chtml(this);
@@ -183,7 +174,7 @@ exports.parseOpenGraph = function(chtml, callback){
 		}
 
 		// If the element isn't in namespace, exit
-		if (namespace.indexOf(propertyValue[0]) < 0){ //
+		if (namespace.indexOf(propertyValue[0]) < 0){
 			return;
 		}
 
@@ -229,22 +220,32 @@ exports.parseOpenGraph = function(chtml, callback){
 			namespace.push(content.split('.')[0]); // Add the type to the acceptable namespace list
 		}
 	});
-
-	callback(meta);
-};
+	if (Object.keys(meta).length === 0){
+		throw reason;
+	}
+	return meta;
+});
 
 
 /**
  * Scrapes schema.org microdata given Cheerio loaded html object
- * @param  {Object}   chtml    Cheerio object with html loaded
- * @param  {Function} callback callback(microdataObject)
+ * @param  {Object}  chtml Cheerio object with html loaded
+ * @return {Object}        promise of schema.org microdata object
  */
-exports.parseSchemaOrgMicrodata = function(chtml,callback){
-	callback(microdata.parse(chtml));
-};
+exports.parseSchemaOrgMicrodata = BBPromise.method(function(chtml){
+	if (!chtml){
+		throw new Error('Undefined argument');
+	}
+
+	var meta = microdata.parse(chtml);
+	if (!meta || !meta.items || !meta.items[0]){
+		throw new Error('No schema.org metadata found in page');
+	}
+	return meta;
+});
 
 /**
- * Global exportable list of scraping functions with string keys
+ * Global exportable list of scraping promises with string keys
  * @type {Object}
  */
 exports.metadataFunctions = {
@@ -259,18 +260,3 @@ exports.metadataFunctions = {
 */
 
 exports.version = require('./package').version;
-
-/*
- Test from main
- */
-
-if (require.main === module) {
-	var fs = require('fs'),
-		scrape = exports;
-
-	console.log('Parser running on test file');
-	var $ = cheerio.load(fs.readFileSync('./test_files/turtle_movie.html'));
-	exports.parseAll($, function(err, results){
-		console.log(JSON.stringify(results));
-	});
-}
