@@ -17,7 +17,7 @@ var assert = require('./utils/assert.js');
 describe('errors', function() {
 
 	it('should not find schema.org metadata, reject promise', function() {
-		var url = 'http://blog.woorank.com/2013/04/dublin-core-metadata-for-seo-and-usability/';
+		var url = 'http://example.com';
 		return preq.get(url)
 		.then(function(callRes) {
 			var $ = cheerio.load(callRes.body);
