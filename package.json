@@ -4,7 +4,7 @@
   "description": "Scrapes metadata of several different standards",
   "main": "index.js",
   "dependencies": {
-    "bluebird": "2.9.24",
+    "bluebird": "2.8.2",
     "cheerio": "0.19.0",
     "microdata-node": "0.1.2",
     "preq": "0.3.13"
