@@ -26,6 +26,16 @@ describe('errors', function() {
 		});
 	});
 
+	it('should not find coins metadata, reject promise', function() {
+		var url = 'http://example.com';
+		return preq.get(url)
+		.then(function(callRes) {
+			var $ = cheerio.load(callRes.body);
+			var prom = meta.parseCOinS($);
+			return assert.fails(prom);
+		});
+	});
+
 	it('should not find dublin core metadata, reject promise', function() {
 		var url = 'http://www.laprovence.com/article/actualites/3411272/marseille-un-proche-du-milieu-corse-abattu-par-balles-en-plein-jour.html';
 		return preq.get(url)
@@ -51,6 +61,21 @@ describe('errors', function() {
 
 	it('should reject promise with undefined cheerio object', function() {
 		var prom = meta.parseOpenGraph(undefined);
+		return assert.fails(prom);
+	});
+
+	it('should reject promise with non-string title', function() {
+		var prom = meta.parseCOinSTitle({});
+		return assert.fails(prom);
+	});
+
+	it('should reject promise with string with no keys', function() {
+		var prom = meta.parseCOinSTitle('');
+		return assert.fails(prom);
+	});
+
+	it('should reject promise with string with bad keys', function() {
+		var prom = meta.parseCOinSTitle('badkey.a&badkey.b');
 		return assert.fails(prom);
 	});
 
