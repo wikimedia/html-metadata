@@ -15,7 +15,23 @@ var cheerio = require('cheerio');
 /* global describe, it, before, beforeEach, after, afterEach */
 
 describe('scraping', function() {
+
+	this.timeout(40000);
+
 	var url;
+
+	it('should get COinS metadata', function() {
+		var url = 'https://en.wikipedia.org/wiki/Viral_phylodynamics';
+		return preq.get(url).then(function(callRes) {
+			var chtml = cheerio.load(callRes.body);
+			return meta.parseCOinS(chtml)
+			.then(function(results){
+				assert.deepEqual(Array.isArray(results), true, 'Expected Array, got' + typeof results);
+				assert.deepEqual(!results.length, false, 'Expected Array with at least 1 item');
+				assert.deepEqual(!results[0].rft, false, 'Expected first item of Array to contain key rft');
+			});
+		});
+	});
 
 	it('should get OpenGraph info', function() {
 		var url = 'http://fortune.com/2015/02/20/nobel-prize-economics-for-sale/';
@@ -35,7 +51,7 @@ describe('scraping', function() {
 		return meta(url)
 		.catch(function(e){throw e;})
 		.then(function(res) {
-			var expectedImage = '{"url":"http://s1.lemde.fr/medias/web/1.2.677/img/placeholder/opengraph.jpg"}';
+			var expectedImage = '{"url":"http://s1.lemde.fr/medias/web/1.2.679/img/placeholder/opengraph.jpg"}';
 			assert.deepEqual(JSON.stringify(res.openGraph.image), expectedImage);
 		});
 	});
@@ -61,5 +77,6 @@ describe('scraping', function() {
 			});
 		});
 	});
+
 
 });

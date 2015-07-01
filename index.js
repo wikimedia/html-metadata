@@ -28,8 +28,8 @@ var index = require('./lib/index.js');
  */
 exports = module.exports = function(urlOrOpts, callback) {
 	return preq.get(urlOrOpts
-	).then(function(callRes) {
-		return index.parseAll(cheerio.load(callRes.body));
+	).then(function(response) {
+		return index.parseAll(cheerio.load(response.body));
 	}).nodeify(callback);
 };
 
@@ -43,6 +43,28 @@ exports = module.exports = function(urlOrOpts, callback) {
  */
 exports.parseAll = function(chtml, callback){
 	return index.parseAll(chtml).nodeify(callback);
+};
+
+/**
+ * Scrapes embedded COinS data given Cheerio loaded html object
+ *
+ * @param  {Object}   chtml      html Cheerio object
+ * @param  {Function} [callback] optional callback function
+ * @return {Object}              BBPromise for metadata
+ */
+exports.parseCOinS = function(chtml, callback){
+	return index.parseCOinS(chtml).nodeify(callback);
+};
+
+/**
+ * Parses value of COinS title tag
+ *
+ * @param  {String}   title      String corresponding to value of title tag in span element
+ * @param  {Function} [callback] Optional callback function
+ * @return {Object}              BBPromise for metadata
+ */
+exports.parseCOinSTitle = function(title, callback){
+	return index.parseCOinSTitle(title).nodeify(callback);
 };
 
 /**
