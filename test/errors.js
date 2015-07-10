@@ -16,6 +16,8 @@ var assert = require('./utils/assert.js');
 
 describe('errors', function() {
 
+	this.timeout(40000);
+
 	it('should not find schema.org metadata, reject promise', function() {
 		var url = 'http://example.com';
 		return preq.get(url)
