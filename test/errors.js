@@ -48,6 +48,16 @@ describe('errors', function() {
 		});
 	});
 
+	it('should not find highwire press metadata, reject promise', function() {
+		var url = 'http://example.com';
+		return preq.get(url)
+		.then(function(callRes) {
+			var $ = cheerio.load(callRes.body);
+			var prom = meta.parseHighwirePress($);
+			return assert.fails(prom);
+		});
+	})
+
 	it('should not find open graph metadata, reject promise', function() {
 		var url = 'http://www.sciencedirect.com/science/article/pii/S0167739X15000965';
 		return preq.get(url)

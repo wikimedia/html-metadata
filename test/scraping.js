@@ -81,14 +81,6 @@ describe('scraping', function() {
 	it('should get basic Highwire Press metadata', function() {
 		url = 'http://mic.microbiologyresearch.org/content/journal/micro/10.1099/mic.0.26954-0';
 		return preq.get(url).then(function(callRes) {
-			var expectedAuthors = [
-				'Jacqueline M. Reimers',
-				'Karen H. Schmidt',
-				'Angelika Longacre',
-				'Dennis K. Reschke',
-				'Barbara E. Wright'
-			];
-
 			var chtml = cheerio.load(callRes.body);
 
 			return meta.parseHighwirePress(chtml)
@@ -106,20 +98,13 @@ describe('scraping', function() {
 	it('should get Highwire Press author tags correctly', function() {
 		url = 'http://mic.microbiologyresearch.org/content/journal/micro/10.1099/mic.0.26954-0';
 		return preq.get(url).then(function(callRes) {
-			var expectedAuthors = [
-				'Jacqueline M. Reimers',
-				'Karen H. Schmidt',
-				'Angelika Longacre',
-				'Dennis K. Reschke',
-				'Barbara E. Wright'
-			];
-
+			var expectedAuthors = '["Jacqueline Reimers", "Karen H. Schmidt", "Angelika Longacre", "Dennis K. Reschke", "Barbara E. Wright"]';
 			var chtml = cheerio.load(callRes.body);
 
 			return meta.parseHighwirePress(chtml)
 			.then(function(results) {
 				var authors = results.authors;
-				assert.deepEqual(JSON.stringify(authors), authors);
+				assert.deepEqual(JSON.stringify(authors), expectedAuthors);
 			})
 		});
 	});
