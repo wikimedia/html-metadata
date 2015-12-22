@@ -3,9 +3,9 @@ html-metadata
 
 # MetaData html scraper and parser for Node.js (supports Promises and callback style)
 
-The aim of this library is to be a comprehensive source for extracting all html embedded metadata. Currently it supports Schema.org microdata using a third party library, a native Dublin Core, Open Graph, and COinS implementation, and some general metadata that doesn't belong to a particular standard (for instance, the content of the title tag, or meta description tags).
+The aim of this library is to be a comprehensive source for extracting all html embedded metadata. Currently it supports Schema.org microdata using a third party library, a native Dublin Core, Highwire Press, Open Graph, and COinS implementation, and some general metadata that doesn't belong to a particular standard (for instance, the content of the title tag, or meta description tags).
 
-Planned is support for RDFa , twitter, AGLS, eprints, highwire, BEPress and other yet unheard of metadata types. Contributions and requests for other metadata types welcome!
+Planned is support for RDFa , twitter, AGLS, eprints, BEPress and other yet unheard of metadata types. Contributions and requests for other metadata types welcome!
 
 ## Install
 
