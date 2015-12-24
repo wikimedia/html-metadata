@@ -3,9 +3,9 @@ html-metadata
 
 # MetaData html scraper and parser for Node.js (supports Promises and callback style)
 
-The aim of this library is to be a comprehensive source for extracting all html embedded metadata. Currently it supports Schema.org microdata using a third party library, a native Dublin Core, Open Graph, and COinS implementation, and some general metadata that doesn't belong to a particular standard (for instance, the content of the title tag, or meta description tags).
+The aim of this library is to be a comprehensive source for extracting all html embedded metadata. Currently it supports Schema.org microdata using a third party library, a native Dublin Core, Highwire Press, Open Graph, and COinS implementation, and some general metadata that doesn't belong to a particular standard (for instance, the content of the title tag, or meta description tags).
 
-Planned is support for RDFa , twitter, AGLS, eprints, highwire, BEPress and other yet unheard of metadata types. Contributions and requests for other metadata types welcome!
+Planned is support for RDFa , twitter, AGLS, eprints, BEPress and other yet unheard of metadata types. Contributions and requests for other metadata types welcome!
 
 ## Install
 
@@ -70,6 +70,27 @@ request(url, function(error, response, html){
 	});
 });
 ```
+
+Options object:
+
+You can also pass an [options object](https://github.com/request/request#requestoptions-callback) as the first argument containing extra parameters. Some websites require the user-agent or cookies to be set in order to get the response.
+
+```
+var scrape = require('html-metadata');
+var request = require('request');
+
+var options =  {
+		url: "http://blog.woorank.com/2013/04/dublin-core-metadata-for-seo-and-usability/",
+		jar: request.jar(), // Cookie jar
+		headers: {
+			'User-Agent': 'webscraper'
+		}
+
+scrape(options, function(error, metadata){
+	console.log(metadata);
+});
+```
+
 The method parseGeneral obtains the following general metadata:
 
 ```html
