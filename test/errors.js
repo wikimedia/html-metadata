@@ -28,6 +28,16 @@ describe('errors', function() {
 		});
 	});
 
+	it('should not find BE Press metadata, reject promise', function() {
+		var url = 'http://example.com';
+		return preq.get(url)
+		.then(function(callRes) {
+			var $ = cheerio.load(callRes.body);
+			var prom = meta.parseBEPress($);
+			return assert.fails(prom);
+		});
+	})
+
 	it('should not find coins metadata, reject promise', function() {
 		var url = 'http://example.com';
 		return preq.get(url)
@@ -92,4 +102,3 @@ describe('errors', function() {
 	});
 
 });
-
