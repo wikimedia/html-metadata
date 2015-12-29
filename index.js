@@ -46,6 +46,17 @@ exports.parseAll = function(chtml, callback){
 };
 
 /**
+ * Scrapes BE Press metadata given html object
+ *
+ * @param  {Object}   chtml      html Cheerio object
+ * @param  {Function} [callback] optional callback function
+ * @return {Object}              BBPromise for metadata
+ */
+exports.parseBEPress = function(chtml, callback){
+	return index.parseBEPress(chtml).nodeify(callback);
+};
+
+/**
  * Scrapes embedded COinS data given Cheerio loaded html object
  *
  * @param  {Object}   chtml      html Cheerio object

@@ -78,6 +78,40 @@ describe('scraping', function() {
 		});
 	});
 
+	it('should get basic BE Press metadata', function() {
+		url = 'http://biostats.bepress.com/harvardbiostat/paper154/';
+		return preq.get(url).then(function(callRes) {
+			var chtml = cheerio.load(callRes.body);
+
+			return meta.parseBEPress(chtml)
+			.then(function(results) {
+				['series_title', 'author', 'author_institution', 'title', 'date', 'pdf_url',
+				 'abstract_html_url', 'publisher', 'online_date'].forEach(function(key) {
+					if(!results[key]) {
+						throw new Error('Expected to find the ' + key + ' key in the response!');
+					}
+				});
+			})
+		});
+	});
+
+	it('should get BE Press author and author_institution tags correctly', function() {
+		url = 'http://biostats.bepress.com/harvardbiostat/paper154/';
+		return preq.get(url).then(function(callRes) {
+			var expectedAuthors = '["Claggett, Brian", "Xie, Minge", "Tian, Lu"]';
+			var expectedAuthorInstitutions = '["Harvard", "Rutgers University - New Brunswick/Piscataway", "Stanford University School of Medicine"]';
+			var chtml = cheerio.load(callRes.body);
+
+			return meta.parseBEPress(chtml)
+			.then(function(results) {
+				var authors = results.author;
+				var authorInstitutions = results.author_institution;
+				assert.deepEqual(JSON.stringify(authors), expectedAuthors);
+				assert.deepEqual(JSON.stringify(authorInstitutions), expectedAuthorInstitutions);
+			})
+		});
+	});
+
 	it('should get basic Highwire Press metadata', function() {
 		url = 'http://mic.microbiologyresearch.org/content/journal/micro/10.1099/mic.0.26954-0';
 		return preq.get(url).then(function(callRes) {
@@ -93,7 +127,7 @@ describe('scraping', function() {
 				});
 			})
 		});
-	})
+	});
 
 	it('should get Highwire Press author tags correctly', function() {
 		url = 'http://mic.microbiologyresearch.org/content/journal/micro/10.1099/mic.0.26954-0';
