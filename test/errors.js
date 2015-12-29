@@ -36,7 +36,7 @@ describe('errors', function() {
 			var prom = meta.parseBEPress($);
 			return assert.fails(prom);
 		});
-	})
+	});
 
 	it('should not find coins metadata, reject promise', function() {
 		var url = 'http://example.com';
@@ -66,7 +66,7 @@ describe('errors', function() {
 			var prom = meta.parseHighwirePress($);
 			return assert.fails(prom);
 		});
-	})
+	});
 
 	it('should not find open graph metadata, reject promise', function() {
 		var url = 'http://www.sciencedirect.com/science/article/pii/S0167739X15000965';
@@ -74,6 +74,16 @@ describe('errors', function() {
 		.then(function(callRes) {
 			var $ = cheerio.load(callRes.body);
 			var prom = meta.parseOpenGraph($);
+			return assert.fails(prom);
+		});
+	});
+
+	it('should not find eprints metadata, reject promise', function() {
+		var url = 'http://example.com';
+		return preq.get(url)
+		.then(function(callRes) {
+			var $ = cheerio.load(callRes.body);
+			var prom = meta.parseEprints($);
 			return assert.fails(prom);
 		});
 	});

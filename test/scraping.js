@@ -51,7 +51,7 @@ describe('scraping', function() {
 		return meta(url)
 		.catch(function(e){throw e;})
 		.then(function(res) {
-			var expectedImage = '{"url":"http://s1.lemde.fr/medias/web/1.2.683/img/placeholder/opengraph.jpg"}';
+			var expectedImage = '{"url":"http://s1.lemde.fr/medias/web/1.2.684/img/placeholder/opengraph.jpg"}';
 			assert.deepEqual(JSON.stringify(res.openGraph.image), expectedImage);
 		});
 	});
@@ -91,7 +91,7 @@ describe('scraping', function() {
 						throw new Error('Expected to find the ' + key + ' key in the response!');
 					}
 				});
-			})
+			});
 		});
 	});
 
@@ -108,7 +108,7 @@ describe('scraping', function() {
 				var authorInstitutions = results.author_institution;
 				assert.deepEqual(JSON.stringify(authors), expectedAuthors);
 				assert.deepEqual(JSON.stringify(authorInstitutions), expectedAuthorInstitutions);
-			})
+			});
 		});
 	});
 
@@ -125,7 +125,7 @@ describe('scraping', function() {
 						throw new Error('Expected to find the ' + key + ' key in the response!');
 					}
 				});
-			})
+			});
 		});
 	});
 
@@ -139,7 +139,26 @@ describe('scraping', function() {
 			.then(function(results) {
 				var authors = results.authors;
 				assert.deepEqual(JSON.stringify(authors), expectedAuthors);
-			})
+			});
+		});
+	});
+
+	it('should get basic EPrints metadata and check for author tags', function() {
+		url = 'http://eprints.gla.ac.uk/113711/';
+		return preq.get(url).then(function(callRes) {
+			var chtml = cheerio.load(callRes.body);
+
+			return meta.parseEprints(chtml)
+			.then(function(results) {
+				['eprintid', 'datestamp', 'title', 'abstract', 'issn', 'creators_name', 'publication', 'citation'].forEach(function(key) {
+					if(!results[key]) {
+						throw new Error('Expected to find the ' + key + ' key in the response!');
+					}
+				});
+				var authors = results.creators_name;
+				var expectedAuthors = '["Gatherer, Derek", "Kohl, Alain"]';
+				assert.deepEqual(JSON.stringify(authors), expectedAuthors);
+			});
 		});
 	});
 
