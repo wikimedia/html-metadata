@@ -51,7 +51,7 @@ describe('scraping', function() {
 		return meta(url)
 		.catch(function(e){throw e;})
 		.then(function(res) {
-			var expectedImage = '{"url":"http://s1.lemde.fr/medias/web/1.2.682/img/placeholder/opengraph.jpg"}';
+			var expectedImage = '{"url":"http://s1.lemde.fr/medias/web/1.2.683/img/placeholder/opengraph.jpg"}';
 			assert.deepEqual(JSON.stringify(res.openGraph.image), expectedImage);
 		});
 	});
