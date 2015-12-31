@@ -1,6 +1,6 @@
 {
   "name": "html-metadata",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Scrapes metadata of several different standards",
   "main": "index.js",
   "dependencies": {
@@ -34,7 +34,8 @@
   "author": "Marielle Volz <marielle.volz@gmail.com>",
   "contributors": [
     "Krzysztof Zbudniewek <krzysztof.zbudniewek@gmail.com>",
-    "Geoffrey Mon <geofbot@gmail.com>"
+    "Geoffrey Mon <geofbot@gmail.com>",
+    "Scimonster <tehalmightyscimonster@gmail.com>"
   ],
   "license": "MIT",
   "bugs": {

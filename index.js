@@ -90,6 +90,17 @@ exports.parseDublinCore = function(chtml, callback){
 };
 
 /**
+ * Scrapes EPrints data given Cheerio loaded html object
+ *
+ * @param  {Object}   chtml      html Cheerio object
+ * @param  {Function} [callback] optional callback function
+ * @return {Object}              BBPromise for metadata
+ */
+exports.parseEprints = function(chtml, callback){
+	return index.parseEprints(chtml).nodeify(callback);
+};
+
+/**
  * Scrapes general metadata terms given Cheerio loaded html object
  *
  * @param  {Object}   chtml      html Cheerio object

@@ -3,9 +3,9 @@ html-metadata
 
 # MetaData html scraper and parser for Node.js (supports Promises and callback style)
 
-The aim of this library is to be a comprehensive source for extracting all html embedded metadata. Currently it supports Schema.org microdata using a third party library, a native BEPress, Dublin Core, Highwire Press, Open Graph, and COinS implementation, and some general metadata that doesn't belong to a particular standard (for instance, the content of the title tag, or meta description tags).
+The aim of this library is to be a comprehensive source for extracting all html embedded metadata. Currently it supports Schema.org microdata using a third party library, a native BEPress, Dublin Core, Highwire Press, Open Graph, EPrints, and COinS implementation, and some general metadata that doesn't belong to a particular standard (for instance, the content of the title tag, or meta description tags).
 
-Planned is support for RDFa , twitter, AGLS, eprints and other yet unheard of metadata types. Contributions and requests for other metadata types welcome!
+Planned is support for RDFa, Twitter, AGLS, and other yet unheard of metadata types. Contributions and requests for other metadata types welcome!
 
 ## Install
 
@@ -43,7 +43,7 @@ Promise-based:
 ```js
 var cheerio = require('cheerio');
 var preq = require('preq'); // Promisified request library
-var dublinCore = require('html-metadata').parseDublinCore;
+var parseDublinCore = require('html-metadata').parseDublinCore;
 
 var url = "http://blog.woorank.com/2013/04/dublin-core-metadata-for-seo-and-usability/";
 
@@ -59,7 +59,7 @@ Callback-based:
 ```js
 var cheerio = require('cheerio');
 var request = require('request');
-var dublinCore = require('html-metadata').parseDublinCore;
+var parseDublinCore = require('html-metadata').parseDublinCore;
 
 var url = "http://blog.woorank.com/2013/04/dublin-core-metadata-for-seo-and-usability/";
 
