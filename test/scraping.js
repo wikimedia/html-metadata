@@ -46,12 +46,12 @@ describe('scraping', function() {
 		});
 	});
 
-	it('should get OpenGraph image tags correctly', function() {
-		url = 'http://www.lemonde.fr';
+	it('should get OpenGraph image tag urls and metadata correctly', function() {
+		url = 'https://github.com';
 		return meta(url)
 		.catch(function(e){throw e;})
 		.then(function(res) {
-			var expectedImage = '{"url":"http://s1.lemde.fr/medias/web/1.2.684/img/placeholder/opengraph.jpg"}';
+			var expectedImage = '{"url":"https://assets-cdn.github.com/images/modules/open_graph/github-logo.png","type":"image/png","width":"1200","height":"1200"},{"url":"https://assets-cdn.github.com/images/modules/open_graph/github-mark.png","type":"image/png","width":"1200","height":"620"},{"url":"https://assets-cdn.github.com/images/modules/open_graph/github-octocat.png","type":"image/png","width":"1200","height":"620"}';
 			assert.deepEqual(JSON.stringify(res.openGraph.image), expectedImage);
 		});
 	});
