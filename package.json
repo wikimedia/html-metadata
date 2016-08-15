@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "bluebird": "2.8.2",
-    "cheerio": "0.19.0",
+    "cheerio": "0.20.0",
     "microdata-node": "0.1.2",
     "preq": "0.3.13"
   },
