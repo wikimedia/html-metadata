@@ -9,7 +9,7 @@ Planned is support for RDFa, Twitter, AGLS, and other yet unheard of metadata ty
 
 ## Install
 
-	npm install git://github.com/mvolz/html-metadata.git
+	npm install git://github.com/wikimedia/html-metadata.git
 
 ## Usage
 
