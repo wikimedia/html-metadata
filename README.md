@@ -80,11 +80,12 @@ var scrape = require('html-metadata');
 var request = require('request');
 
 var options =  {
-		url: "http://blog.woorank.com/2013/04/dublin-core-metadata-for-seo-and-usability/",
-		jar: request.jar(), // Cookie jar
-		headers: {
-			'User-Agent': 'webscraper'
-		}
+	url: "http://blog.woorank.com/2013/04/dublin-core-metadata-for-seo-and-usability/",
+	jar: request.jar(), // Cookie jar
+	headers: {
+		'User-Agent': 'webscraper'
+	}
+};
 
 scrape(options, function(error, metadata){
 	console.log(metadata);
