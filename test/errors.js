@@ -88,6 +88,16 @@ describe('errors', function() {
 		});
 	});
 
+	it('should not find twitter metadata, reject promise', function() {
+		var url = 'http://example.com';
+		return preq.get(url)
+		.then(function(callRes) {
+			var $ = cheerio.load(callRes.body);
+			var prom = meta.parseTwitter($);
+			return assert.fails(prom);
+		});
+	});
+
 	//TODO: Add test for lacking general metadata
 	//TODO: Add test for lacking any metadata
 

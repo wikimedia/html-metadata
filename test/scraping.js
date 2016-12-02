@@ -16,7 +16,7 @@ var cheerio = require('cheerio');
 
 describe('scraping', function() {
 
-	this.timeout(40000);
+	this.timeout(50000);
 
 	var url;
 
@@ -140,6 +140,31 @@ describe('scraping', function() {
 			return meta.parseSchemaOrgMicrodata(chtml)
 			.then(function(results){
 				assert.deepEqual(JSON.stringify(results), expected);
+			});
+		});
+	});
+
+	describe('twitter tests', function() {
+		it('should get most basic twitter info', function() {
+			url = 'http://www.aftenposten.no/kultur/Pinlig-for-Skaber-555558b.html';
+			return meta(url)
+			.catch(function(e){throw e;})
+			.then(function(res) {
+				['card', 'site', 'description', 'title', 'image'].forEach(function(key) {
+					if(!res.twitter[key]) {
+						throw new Error('Expected to find the ' + key + ' key in the response!');
+					}
+				});
+			});
+		});
+
+		it('should get twitter nested data correctly', function() {
+			url = 'http://www.theguardian.com/us';
+			return meta(url)
+			.catch(function(e){throw e;})
+			.then(function(res) {
+				var expected = '{"app":{"id":{"iphone":"409128287","ipad":"409128287","googleplay":"com.guardian"},"name":{"googleplay":"The Guardian","ipad":"The Guardian","iphone":"The Guardian"},"url":{"ipad":"gnmguardian://us?contenttype=front&source=twitter","iphone":"gnmguardian://us?contenttype=front&source=twitter"}},"site":"@guardian","card":"summary","url":"https://www.theguardian.com/us"}';
+				assert.deepEqual(JSON.stringify(res.twitter), expected);
 			});
 		});
 	});
