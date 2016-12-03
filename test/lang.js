@@ -11,7 +11,7 @@ var assert = require('./utils/assert.js');
 // mocha defines to avoid JSHint breakage
 /* global describe, it, before, beforeEach, after, afterEach */
 
-describe('scraping', function() {
+describe('LangScraping', function() {
 
 	this.timeout(40000);
 
