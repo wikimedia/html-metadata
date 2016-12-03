@@ -27,7 +27,7 @@ describe('LangScraping', function() {
     		}
 			};
 			return meta(options, function(error, metadata){
-				assert.deepEqual(eval(metadata).general.lang, expected);
+				assert.deepEqual(metadata.general.lang, expected);
 			});
 		});
 	});
