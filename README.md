@@ -103,6 +103,7 @@ The method parseGeneral obtains the following general metadata:
 <meta name ="robots" content="">
 <link rel="shortlink" href="">
 <title></title>
+<html lang="en">
 ```
 
 ## Tests
