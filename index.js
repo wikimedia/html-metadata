@@ -144,6 +144,17 @@ exports.parseSchemaOrgMicrodata = function(chtml, callback){
 };
 
 /**
+ * Scrapes Twitter data given html object
+ *
+ * @param  {Object}   chtml      html Cheerio object
+ * @param  {Function} [callback] optional callback function
+ * @return {Object}              BBPromise for metadata
+ */
+exports.parseTwitter = function(chtml, callback){
+	return index.parseTwitter(chtml).nodeify(callback);
+};
+
+/**
  * Global exportable list of scraping promises with string keys
  * @type {Object}
  */
