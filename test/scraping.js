@@ -169,4 +169,33 @@ describe('scraping', function() {
 		});
 	});
 
+	describe('JSON-LD tests (for types of Organizations)', function() {
+		var urls = ['http://www.uber.com/en-GB/', 'http://www.theguardian.com/us', 'http://jsonld.com/'];
+		urls.forEach(function(test) {
+			describe(test, function() {
+				it('should return an object or array', function() {
+					return meta(test)
+					.then(function(res) {
+						assert.ok(typeof res.jsonLd === 'object');
+					});
+				});
+
+				it('should get correct JSON-LD data', function() {
+					return meta(test)
+					.then(function(res) {
+						var result = res.jsonLd;
+						if (res.jsonLd instanceof Array) {
+							result = res.jsonLd.filter(function(r) {
+								return r['@type'] === 'Organization'
+							})[0];
+						};
+						['@context', '@type', 'url', 'logo'].forEach(function(key) {
+							assert.ok(result.hasOwnProperty(key));
+						});
+					});
+				});
+			});
+		});
+	});
+
 });

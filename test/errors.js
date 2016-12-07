@@ -8,6 +8,7 @@ var cheerio = require('cheerio');
 var meta = require('../index');
 var preq = require('preq'); // Promisified Request library
 var assert = require('./utils/assert.js');
+var fs = require('fs');
 
 
 // mocha defines to avoid JSHint breakage
@@ -96,6 +97,21 @@ describe('errors', function() {
 			var prom = meta.parseTwitter($);
 			return assert.fails(prom);
 		});
+	});
+
+	it('should not find JSON-LD, reject promise', function() {
+		var url = 'http://example.com';
+		return preq.get(url)
+		.then(function(callRes) {
+			var $ = cheerio.load(callRes.body);
+			var prom = meta.parseJsonLd($);
+			return assert.fails(prom);
+		});
+	});
+
+	it('should reject promise with malformed JSON-LD', function() {
+		var $ = cheerio.load(fs.readFileSync('./test/static/turtle_article.html'));
+		return assert.fails(meta.parseJsonLd($));
 	});
 
 	//TODO: Add test for lacking general metadata

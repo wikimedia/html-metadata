@@ -155,6 +155,17 @@ exports.parseTwitter = function(chtml, callback){
 };
 
 /**
+ * Retrieves JSON-LD for given html object
+ *
+ * @param  {Object}   chtml      html Cheerio object
+ * @param  {Function} [callback] optional callback function
+ * @return {Object}              BBPromise for JSON-LD
+ */
+exports.parseJsonLd = function(chtml, callback){
+	return index.parseJsonLd(chtml).nodeify(callback);
+};
+
+/**
  * Global exportable list of scraping promises with string keys
  * @type {Object}
  */
