@@ -1,0 +1,130 @@
+{
+	"bePress": {
+		"series_title": "Turtles",
+		"author": "Turtle Lvr",
+		"author_institution": "Mediawiki",
+		"title": "Turtles are AWESOME!!1",
+		"date": "2012",
+		"pdf_url": "http://www.example.com/turtlelvr/pdf",
+		"abstract_html_url": "http://www.example.com/turtlelvr",
+		"publisher": "Turtles Society",
+		"online_date": "2012/02/04"
+	},
+	"coins": [{
+		"ctx_ver": "Z39.88-2004",
+		"rft_id": "info:doi/http://dx.doi.org/10.5555/12345678",
+		"rfr_id": "info:sid/crossref.org:search",
+		"rft_val_fmt": "info:ofi/fmt:kev:mtx:journal",
+		"rft": {
+			"atitle": "Toward a Unified Theory of High-Energy Metaphysics: Silly String Theory",
+			"jtitle": "Journal of Psychoceramics",
+			"date": "2008",
+			"volume": "5",
+			"issue": "11",
+			"spage": "1",
+			"epage": "3",
+			"aufirst": "Josiah",
+			"aulast": "Carberry",
+			"genre": "article",
+			"au": ["Josiah Carberry"]
+		}
+	}],
+	"dublinCore": {
+		"title": "Turtles are AWESOME!!1",
+		"creator": "http://www.example.com/turtlelvr",
+		"description": "Exposition on the awesomeness of turtles",
+		"date": "2012-02-04 12:00:00",
+		"type": "Text.Article"
+	},
+	"general": {
+		"author": "Turtle Lvr",
+		"authorlink": "http://examples.com/turtlelvr",
+		"canonical": "http://example.com/turtles",
+		"description": "Exposition on the awesomeness of turtles",
+		"publisher": "https://mediawiki.org",
+		"robots": "we welcome our robot overlords",
+		"shortlink": "http://example.com/c",
+		"title": "Turtles are AWESOME!!1 | Awesome Turtles Website",
+		"lang": "en"
+	},
+	"highwirePress": {
+		"journal_title": "Turtles",
+		"issn": "1234-5678",
+		"doi": "10.1000/123",
+		"publication_date": "2012-02-04",
+		"title": "Turtles are AWESOME!!1",
+		"author": "Turtle Lvr",
+		"author_institution": "Mediawiki",
+		"volume": "150",
+		"issue": "1",
+		"firstpage": "123",
+		"lastpage": "456",
+		"publisher": "Turtles Society",
+		"abstract": "Exposition on the awesomeness of turtles."
+	},
+	"jsonLd": {
+	  "@context": "http://schema.org", 
+	  "@type": "Organization",
+	  "url": "https://www.turtles.com"
+	},
+	"openGraph": {
+		"locale": "en_US",
+		"type": "article",
+		"title": "Turtles are AWESOME!!1",
+		"description": "Exposition on the awesomeness of turtles",
+		"url": "http://example.com",
+		"site_name": "Awesome Turtles Website",
+		"image": [{
+			"url": "http://example.com/turtle.jpg",
+			"secure_url": "https://secure.example.com/turtle.jpg",
+			"type": "image/jpeg",
+			"width": "400",
+			"height": "300"
+		}, {
+			"url": "http://example.com/shell.jpg",
+			"width": "200",
+			"height": "150"
+		}],
+		"audio": {
+			"url": "http://example.com/sound.mp3",
+			"secure_url": "https://secure.example.com/sound.mp3",
+			"type": "audio/mpeg"
+		},
+		"tag": ["turtles", "are", "awesome"],
+		"section": ["Turtles are tough", "Turtles are flawless", "Turtles are cute"],
+		"published_time": "2012-02-04T12:00:00+00:00",
+		"modified_time": "2015-01-14T19:14:27+00:00",
+		"author": "http://examples.com/turtlelvr",
+		"publisher": "http://mediawiki.org"
+	},
+	"eprints": {
+		"title": "Turtles are AWESOME!!1",
+		"creators_name": "http://www.example.com/turtlelvr",
+		"abstract": "Exposition on the awesomeness of turtles",
+		"datestamp": "2012-02-04 12:00:00",
+		"type": "article"
+	},
+	"twitter": {
+		"card": "summary",
+		"site": "@Turtlessssssssss",
+		"creator": ["@Turtlessssssssss", "@Turtlezzzzzzzzzz"],
+		"url": "http://www.example.com/turtles",
+		"title": "Turtles are AWESOME!!1",
+		"description": "Exposition on the awesomeness of turtles",
+		"image": {
+			"url": "http://example.com/turtles.jpg",
+			"alt": "It's a bunch of turtles!"
+		},
+		"app": {
+			"url": {
+				"iphone": "turtle://",
+				"googleplay": "turtle://"
+			},
+			"id": {
+				"iphone": "000",
+				"googleplay": "superturtlearticle.androidapp"
+			}
+		}
+	}
+}
+

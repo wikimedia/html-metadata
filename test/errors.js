@@ -110,7 +110,7 @@ describe('errors', function() {
 	});
 
 	it('should reject promise with malformed JSON-LD', function() {
-		var $ = cheerio.load(fs.readFileSync('./test/static/turtle_article.html'));
+		var $ = cheerio.load(fs.readFileSync('./test/static/turtle_article_errors.html'));
 		return assert.fails(meta.parseJsonLd($));
 	});
 

@@ -170,7 +170,7 @@ describe('scraping', function() {
 	});
 
 	describe('JSON-LD tests (for types of Organizations)', function() {
-		var urls = ['http://www.uber.com/en-GB/', 'http://www.theguardian.com/us', 'http://jsonld.com/'];
+		var urls = ['http://www.theguardian.com/us', 'http://jsonld.com/', 'http://www.apple.com/'];
 		urls.forEach(function(test) {
 			describe(test, function() {
 				it('should return an object or array', function() {
@@ -186,7 +186,7 @@ describe('scraping', function() {
 						var result = res.jsonLd;
 						if (res.jsonLd instanceof Array) {
 							result = res.jsonLd.filter(function(r) {
-								return r['@type'] === 'Organization'
+								return r['@type'] === 'Organization';
 							})[0];
 						};
 						['@context', '@type', 'url', 'logo'].forEach(function(key) {
