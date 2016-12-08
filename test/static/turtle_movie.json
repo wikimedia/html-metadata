@@ -1,0 +1,57 @@
+{
+    "dublinCore": {
+        "title": "Turtles of the Jungle",
+        "creator": "http://www.example.com/turtlelvr",
+        "description": "A 2008 film about jungle turtles.",
+        "date": "2012-02-04 12:00:00",
+        "type": "Image.Moving"
+    },
+    "general": {
+        "author": "Turtle Lvr",
+        "authorlink": "http://examples.com/turtlelvr",
+        "canonical": "http://example.com/turtles",
+        "description": "Exposition on the awesomeness of turtles",
+        "publisher": "https://mediawiki.org",
+        "robots": "we welcome our robot overlords",
+        "shortlink": "http://example.com/c",
+        "title": "Turtles are AWESOME!!1 | Awesome Turtles Website",
+        "lang": "en"
+    },
+    "openGraph": {
+        "locale": "en_US",
+        "type": "video.movie",
+        "title": "Turtles of the Jungle",
+        "description": "A 2008 film about jungle turtles.",
+        "url": "http://example.com",
+        "site_name": "Awesome Turtle Movies Website",
+        "image": [{
+            "url": "http://example.com/turtle.jpg"
+        }, {
+            "url": "http://example.com/shell.jpg"
+        }],
+        "tag": ["turtle", "movie", "awesome"],
+        "director": "http://www.example.com/PhilTheTurtle",
+        "actor": ["http://www.example.com/PatTheTurtle", "http://www.example.com/SaminaTheTurtle"],
+        "writer": "http://www.example.com/TinaTheTurtle",
+        "release_date": "2015-01-14T19:14:27+00:00",
+        "duration": "1000000"
+    },
+    "twitter": {
+        "card": "summary",
+        "site": "@Turtlessssssssss",
+        "creator": "@Turtlessssssssss",
+        "url": "http://www.example.com/turtles",
+        "title": "Turtles of the Jungle",
+        "description": "A 2008 film about jungle turtles.",
+        "player": {
+            "url": "http://www.example.com/turtles/player",
+            "width": "400",
+            "height": "400",
+            "stream": {
+                "url": "http://www.example.com/turtles/turtle.mp4",
+                "content_type": "video/mp4"
+            }
+        }
+    }
+}
+
