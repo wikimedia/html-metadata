@@ -114,7 +114,7 @@ describe('scraping', function() {
 			.catch(function(e){throw e;})
 			.then(function(res) {
 				['title', 'description', 'author'].forEach(function(key) {
-					if(!res.openGraph[key]) {
+					if(!res.openGraph.hasOwnProperty(key)) {
 						throw new Error('Expected to find the ' + key + ' key in the response!');
 					}
 				});
