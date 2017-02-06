@@ -109,9 +109,9 @@ describe('errors', function() {
 		});
 	});
 
-	it('should reject promise with malformed JSON-LD', function() {
+	it('should reject promise with malformed JSON-LD and missing content tags', function() {
 		var $ = cheerio.load(fs.readFileSync('./test/static/turtle_article_errors.html'));
-		return assert.fails(meta.parseJsonLd($));
+		return assert.fails(meta.parseAll($));
 	});
 
 	//TODO: Add test for lacking general metadata
