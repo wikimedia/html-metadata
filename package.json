@@ -1,6 +1,6 @@
 {
   "name": "html-metadata",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "Scrapes metadata of several different standards",
   "main": "index.js",
   "dependencies": {
@@ -20,10 +20,16 @@
     "coverage": "istanbul cover _mocha -- -R spec"
   },
   "keywords": [
+    "bepress",
+    "coins",
+    "dublin core",
+    "eprints",
+    "highwire press",
+    "json-ld",
     "open graph",
     "metadata",
     "microdata",
-    "dublin core",
+    "twitter cards",
     "web scraper"
   ],
   "repository": {

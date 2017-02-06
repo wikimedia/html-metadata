@@ -130,6 +130,7 @@ describe('scraping', function() {
 				assert.deepEqual(JSON.stringify(res.openGraph.image), expectedImage);
 			});
 		});
+
 	});
 
 	it('should get Schema.org Microdata', function() {
@@ -192,6 +193,21 @@ describe('scraping', function() {
 						['@context', '@type', 'url', 'logo'].forEach(function(key) {
 							assert.ok(result.hasOwnProperty(key));
 						});
+					});
+				});
+			});
+		});
+	});
+
+	it('should not have any undefined values', function() {
+		url = 'https://www.cnet.com/special-reports/vr101/';
+		return preq.get(url).then(function(callRes) {
+			var chtml = cheerio.load(callRes.body);
+			return meta.parseAll(chtml)
+			.then(function(results) {
+				Object.keys(results).forEach(function(metadataType) {
+					Object.keys(results[metadataType]).forEach(function(key) {
+						assert.notDeepEqual(results[metadataType][key], undefined); // Ensure all values are not undefined in response
 					});
 				});
 			});
