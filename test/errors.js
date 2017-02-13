@@ -70,7 +70,7 @@ describe('errors', function() {
 	});
 
 	it('should not find open graph metadata, reject promise', function() {
-		var url = 'http://www.sciencedirect.com/science/article/pii/S0167739X15000965';
+		var url = 'http://www.example.com';
 		return preq.get(url)
 		.then(function(callRes) {
 			var $ = cheerio.load(callRes.body);
