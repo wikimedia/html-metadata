@@ -203,14 +203,14 @@ describe('scraping', function() {
 			return meta(url)
 			.catch(function(e){throw e;})
 			.then(function(res) {
-				var expected = '{"app":{"id":{"iphone":"409128287","ipad":"409128287","googleplay":"com.guardian"},"name":{"googleplay":"The Guardian","ipad":"The Guardian","iphone":"The Guardian"},"url":{"ipad":"gnmguardian://us?contenttype=front&source=twitter","iphone":"gnmguardian://us?contenttype=front&source=twitter"}},"site":"@guardian","card":"summary","url":"https://www.theguardian.com/us"}';
+				var expected = '{"app":{"id":{"iphone":"409128287","ipad":"409128287","googleplay":"com.guardian"},"name":{"googleplay":"The Guardian","ipad":"The Guardian","iphone":"The Guardian"},"url":{"ipad":"gnmguardian://us?contenttype=front&source=twitter","iphone":"gnmguardian://us?contenttype=front&source=twitter"}},"site":"@guardian","card":"summary","dnt":"on","url":"https://www.theguardian.com/us"}';
 				assert.deepEqual(JSON.stringify(res.twitter), expected);
 			});
 		});
 	});
 
 	describe('parseJsonLd function', function() {
-		var urls = ['http://www.theguardian.com/us', 'http://jsonld.com/', 'http://www.apple.com/'];
+		var urls = ['http://www.theguardian.com/us', 'http://www.apple.com/'];
 		urls.forEach(function(test) {
 			describe(test, function() {
 				it('should return an object or array and get correct data', function() {
