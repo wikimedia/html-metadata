@@ -45,6 +45,18 @@ exports.parseAll = function(chtml, callback){
 };
 
 /**
+ * Exported function that takes html string and
+ * returns a BBPromise for all available metadata
+ *
+ * @param  {Object}   html  	 html String HTML of the page
+ * @param  {Function} [callback] Optional callback
+ * @return {Object}              BBPromise for metadata
+ */
+exports.loadHTML = function(html, callback) {
+	return index.parseAll(cheerio.load(html)).nodeify(callback);
+};
+
+/**
  * Scrapes BE Press metadata given html object
  *
  * @param  {Object}   chtml      html Cheerio object
