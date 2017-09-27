@@ -38,6 +38,24 @@ describe('static files', function() {
 			assert.deepEqual(results, expected);
 		});
 	});
+	it('should get correct info using loadFromFile method using encoding from turtle movie file ', function() {
+		expected = JSON.parse(fs.readFileSync('./test/static/turtle_movie.json'));
+		return meta.loadFromFile('./test/static/turtle_movie.html', { encoding: 'utf-8' }).then(function(results){
+			assert.deepEqual(results, expected);
+		});
+	});
+	it('should get correct info using loadFromFile method using encoding and callback from turtle movie file ', function() {
+		expected = JSON.parse(fs.readFileSync('./test/static/turtle_movie.json'));
+		return meta.loadFromFile('./test/static/turtle_movie.html', { encoding: 'utf-8' }, (err, results) => {
+			assert.deepEqual(results, expected);
+		});
+	});
+	it('should get correct info using loadFromFile method using only callback from turtle movie file ', function() {
+		expected = JSON.parse(fs.readFileSync('./test/static/turtle_movie.json'));
+		return meta.loadFromFile('./test/static/turtle_movie.html', (err, results) => {
+			assert.deepEqual(results, expected);
+		});
+	});
 
 	it('should get correct info from turtle article file', function() {
 		expected = JSON.parse(fs.readFileSync('./test/static/turtle_article.json'));
