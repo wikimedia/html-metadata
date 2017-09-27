@@ -13,7 +13,7 @@ Import modules
 var BBPromise = require('bluebird');
 var cheerio = require('cheerio');
 var preq = require('preq'); // Promisified Request library
-var fs = require('fs');
+var fs = BBPromise.promisifyAll(require('fs'));
 
 var index = require('./lib/index.js');
 
@@ -62,12 +62,22 @@ exports.loadFromString = function(html, callback) {
  * returns a BBPromise for all available metadata
  *
  * @param  {String}   path  	 path Path to HTML file
+ * @param  {Object}   [opts]  	 opts Additional options such as encoding
  * @param  {Function} [callback] Optional callback
  * @return {Object}              BBPromise for metadata
  */
-exports.loadFromFile = function(path, callback) {
-	var html = fs.readFileSync(path, 'utf-8');
-	return index.parseAll(cheerio.load(html)).nodeify(callback);
+exports.loadFromFile = function(path, opts, callback) {
+	var defaultEncoding = 'utf-8';
+
+	opts = opts || defaultEncoding;
+	if (typeof opts === 'function') {
+		callback = opts;
+		opts = defaultEncoding;
+	}
+
+	return fs.readFileAsync(path, opts).then(html =>
+		index.parseAll(cheerio.load(html)).nodeify(callback)
+	);
 };
 
 /**
