@@ -34,30 +34,6 @@ exports = module.exports = function(urlOrOpts, callback) {
 };
 
 /**
- * Returns Object containing all available datatypes, keyed
- * using the same keys as in metadataFunctions.
- *
- * @param  {Object}   chtml      html Cheerio object to parse
- * @param  {Function} [callback] optional callback function
- * @return {Object}              BBPromise for metadata
- */
-exports.parseAll = function(chtml, callback){
-	return index.parseAll(chtml).nodeify(callback);
-};
-
-/**
- * Exported function that takes html string and
- * returns a BBPromise for all available metadata
- *
- * @param  {String}   html  	 html String HTML of the page
- * @param  {Function} [callback] Optional callback
- * @return {Object}              BBPromise for metadata
- */
-exports.loadFromString = function(html, callback) {
-	return index.parseAll(cheerio.load(html)).nodeify(callback);
-};
-
-/**
  * Exported function that takes html file and
  * returns a BBPromise for all available metadata
  *
@@ -78,6 +54,30 @@ exports.loadFromFile = function(path, opts, callback) {
 	return fs.readFileAsync(path, opts).then(html =>
 		index.parseAll(cheerio.load(html)).nodeify(callback)
 	);
+};
+
+/**
+ * Exported function that takes html string and
+ * returns a BBPromise for all available metadata
+ *
+ * @param  {String}   html  	 html String HTML of the page
+ * @param  {Function} [callback] Optional callback
+ * @return {Object}              BBPromise for metadata
+ */
+exports.loadFromString = function(html, callback) {
+	return index.parseAll(cheerio.load(html)).nodeify(callback);
+};
+
+/**
+ * Returns Object containing all available datatypes, keyed
+ * using the same keys as in metadataFunctions.
+ *
+ * @param  {Object}   chtml      html Cheerio object to parse
+ * @param  {Function} [callback] optional callback function
+ * @return {Object}              BBPromise for metadata
+ */
+exports.parseAll = function(chtml, callback){
+	return index.parseAll(chtml).nodeify(callback);
 };
 
 /**
