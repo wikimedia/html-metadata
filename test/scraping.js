@@ -232,6 +232,26 @@ describe('scraping', function() {
 		});
 	});
 
+	describe('parsePrism function', function() {
+		it('should get PRISM metadata from http://nature.com', function() {
+			url = 'https://www.nature.com/articles/nature24679';
+			return preq.get(url).then(function(callRes) {
+				var expectedKeys = ['issn', 'publicationName', 'publicationDate', 'section', 'copyright', 'rightsAgent', 'url', 'doi'];
+				var chtml = cheerio.load(callRes.body);
+
+				return meta.parsePrism(chtml)
+				.catch(function(e){throw e;})
+				.then(function(results) {
+					expectedKeys.forEach(function(key) {
+						if(!results.hasOwnProperty(key)) {
+							throw new Error('Expected to find the ' + key + ' key in the response!');
+						}
+					});
+				});
+			});
+		});
+	});
+
 	it('should not have any undefined values', function() {
 		url = 'https://www.cnet.com/special-reports/vr101/';
 		return preq.get(url).then(function(callRes) {
