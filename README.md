@@ -95,6 +95,8 @@ scrape(options, function(error, metadata){
 The method parseGeneral obtains the following general metadata:
 
 ```html
+<link rel="apple-touch-icon" href="" sizes="" type="">
+<link rel="icon" href="" sizes="" type="">
 <meta name="author" content="">
 <link rel="author" href="">
 <link rel="canonical" href="">

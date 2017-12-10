@@ -37,10 +37,23 @@
 		"type": "Text.Article"
 	},
 	"general": {
+		"appleTouchIcons": [
+			{
+				"href": "turtleapple.png",
+				"sizes": "72x72"
+			}
+		],
 		"author": "Turtle Lvr",
 		"authorlink": "http://examples.com/turtlelvr",
 		"canonical": "http://example.com/turtles",
 		"description": "Exposition on the awesomeness of turtles",
+		"icons": [
+			{
+				"href": "turtle.png",
+				"sizes": "18x18",
+				"type": "image/png"
+			}
+		],
 		"publisher": "https://mediawiki.org",
 		"robots": "we welcome our robot overlords",
 		"shortlink": "http://example.com/c",
@@ -63,7 +76,7 @@
 		"abstract": "Exposition on the awesomeness of turtles."
 	},
 	"jsonLd": {
-	  "@context": "http://schema.org", 
+	  "@context": "http://schema.org",
 	  "@type": "Organization",
 	  "url": "https://www.turtles.com"
 	},
@@ -127,4 +140,3 @@
 		}
 	}
 }
-

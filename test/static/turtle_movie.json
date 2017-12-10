@@ -7,10 +7,21 @@
         "type": "Image.Moving"
     },
     "general": {
+        "appleTouchIcons": [
+    			{
+    				"href": "movieturtleapple.png"
+    			}
+  		  ],
         "author": "Turtle Lvr",
         "authorlink": "http://examples.com/turtlelvr",
         "canonical": "http://example.com/turtles",
         "description": "Exposition on the awesomeness of turtles",
+        "icons": [
+    			{
+    				"href": "movieturtle.png",
+    				"type": "image/png"
+    			}
+    		],
         "publisher": "https://mediawiki.org",
         "robots": "we welcome our robot overlords",
         "shortlink": "http://example.com/c",
@@ -54,4 +65,3 @@
         }
     }
 }
-
