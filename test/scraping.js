@@ -34,7 +34,7 @@ describe('scraping', function() {
 	});
 
 	describe('parseBEPress function', function() {
-		it('should get BE Press metadata tags', function() {
+		it.skip('should get BE Press metadata tags', function() {
 			url = 'http://biostats.bepress.com/harvardbiostat/paper154/';
 			return preq.get(url).then(function(callRes) {
 				var expectedAuthors = ['Claggett, Brian', 'Xie, Minge', 'Tian, Lu'];
