@@ -10,7 +10,7 @@ This file contains entirely invalid metadata and should case parseAll to fail
 
 <script type="application/ld+json">
 {
-"@context" / "http://schema.org", 
+"@context" / "http://schema.org",
 "@type": "Organization"
 "url": "https://www.turtles.com"
 }
@@ -21,6 +21,8 @@ This file contains entirely invalid metadata and should case parseAll to fail
 <meta name="description" badcontent="Exposition on the awesomeness of turtles"/>
 <meta name="keywords" badcontent="turtle, movie" />
 
+<link rel="apple-touch-icon" badhref="movieturtleapple.png">
+<link rel="icon" badhref="movieturtle.png" badtype="image/png">
 <link rel="canonical" badhref="http://example.com/turtles" />
 <link rel="publisher" badhref="https://mediawiki.org"/>
 <link rel="author" badhref="http://examples.com/turtlelvr"/>
