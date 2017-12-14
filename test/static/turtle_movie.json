@@ -71,6 +71,12 @@
 				"content_type": "video/mp4"
 			}
 		}
+	},
+	"prism": {
+			"publicationName": "Turtles of the Jungle",
+			"publicationDate": "2012-02-04",
+			"copyright": "2012 Turtles Society",
+			"rightsAgent": "permissions@turtles.com",
+			"url": "https://www.turtles.com"
 	}
-
 }
