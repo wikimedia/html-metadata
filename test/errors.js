@@ -109,13 +109,11 @@ describe('errors', function() {
 		});
 	});
 
-	it('should reject promise with malformed JSON-LD and missing content tags', function() {
+	it('should reject parseALL promise for entire error file', function() {
 		var $ = cheerio.load(fs.readFileSync('./test/static/turtle_article_errors.html'));
 		return assert.fails(meta.parseAll($));
 	});
 
-	//TODO: Add test for lacking general metadata
-	//TODO: Add test for lacking any metadata
 
 	it('should reject promise with undefined cheerio object', function() {
 		var prom = meta.parseOpenGraph(undefined);
