@@ -41,6 +41,9 @@
 			{
 				"href": "turtleapple.png",
 				"sizes": "72x72"
+			},
+			{
+				"href": "turtleapple2.png"
 			}
 		],
 		"author": "Turtle Lvr",
@@ -51,6 +54,10 @@
 			{
 				"href": "turtle.png",
 				"sizes": "18x18",
+				"type": "image/png"
+			},
+			{
+				"href": "turtle2.png",
 				"type": "image/png"
 			}
 		],

@@ -10,6 +10,10 @@
         "appleTouchIcons": [
     			{
     				"href": "movieturtleapple.png"
+    			},
+          {
+    				"href": "movieturtleapple2.png",
+            "sizes": "72x72"
     			}
   		  ],
         "author": "Turtle Lvr",
@@ -20,6 +24,10 @@
     			{
     				"href": "movieturtle.png",
     				"type": "image/png"
+    			},
+          {
+    				"href": "movieturtle2.png",
+            "sizes": "18x18"
     			}
     		],
         "publisher": "https://mediawiki.org",
