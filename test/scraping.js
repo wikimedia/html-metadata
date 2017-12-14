@@ -98,10 +98,10 @@ describe('scraping', function() {
 		it('should get html lang parameter', function() {
 			var expected = "fr";
 			var options =  {
-    		url: "http://www.lemonde.fr",
-    		headers: {
-        	'User-Agent': 'webscraper'
-    			}
+				url: "http://www.lemonde.fr",
+				headers: {
+					'User-Agent': 'webscraper'
+					}
 			};
 			return preq.get(options).then(function(callRes) {
 				var chtml = cheerio.load(callRes.body);
@@ -134,7 +134,7 @@ describe('scraping', function() {
 		});
 	});
 
- 	describe('parseOpenGraph function', function() {
+	describe('parseOpenGraph function', function() {
 		it('from http://fortune.com', function() {
 			url = 'http://fortune.com/2015/02/20/nobel-prize-economics-for-sale/';
 			return preq.get(url).then(function(callRes) {
