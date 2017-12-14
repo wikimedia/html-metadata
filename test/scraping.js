@@ -34,7 +34,7 @@ describe('scraping', function() {
 	});
 
 	describe('parseBEPress function', function() {
-		it('should get BE Press metadata tags', function() {
+		it.skip('should get BE Press metadata tags', function() {
 			url = 'http://biostats.bepress.com/harvardbiostat/paper154/';
 			return preq.get(url).then(function(callRes) {
 				var expectedAuthors = ['Claggett, Brian', 'Xie, Minge', 'Tian, Lu'];
@@ -74,7 +74,7 @@ describe('scraping', function() {
 	});
 
 	describe('parseEPrints function', function() {
-		it('should get EPrints metadata', function() {
+		it.skip('should get EPrints metadata', function() {
 			url = 'http://eprints.gla.ac.uk/113711/';
 			return preq.get(url).then(function(callRes) {
 				var chtml = cheerio.load(callRes.body);
@@ -226,6 +226,26 @@ describe('scraping', function() {
 								assert.ok(result.hasOwnProperty(key));
 							});
 						});
+					});
+				});
+			});
+		});
+	});
+
+	describe('parsePrism function', function() {
+		it('should get PRISM metadata from http://nature.com', function() {
+			url = 'https://www.nature.com/articles/nature24679';
+			return preq.get(url).then(function(callRes) {
+				var expectedKeys = ['issn', 'publicationName', 'publicationDate', 'section', 'copyright', 'rightsAgent', 'url', 'doi'];
+				var chtml = cheerio.load(callRes.body);
+
+				return meta.parsePrism(chtml)
+				.catch(function(e){throw e;})
+				.then(function(results) {
+					expectedKeys.forEach(function(key) {
+						if(!results.hasOwnProperty(key)) {
+							throw new Error('Expected to find the ' + key + ' key in the response!');
+						}
 					});
 				});
 			});

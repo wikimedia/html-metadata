@@ -145,5 +145,15 @@
 				"googleplay": "superturtlearticle.androidapp"
 			}
 		}
+	},
+	"prism": {
+		"issn": "1234-5678",
+		"publicationName": "Turtles Society",
+		"publicationDate": "2012-02-04",
+		"startingPage": "123",
+		"copyright": "2012 Turtles Society",
+		"rightsAgent": "permissions@turtles.com",
+		"url": "https://www.turtles.com",
+		"doi": "10.1000/123"
 	}
 }

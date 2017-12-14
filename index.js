@@ -166,6 +166,17 @@ exports.parseTwitter = function(chtml, callback){
 };
 
 /**
+ * Scrapes PRISM data given html object
+ *
+ * @param  {Object}   chtml      html Cheerio object
+ * @param  {Function} [callback] optional callback function
+ * @return {Object}              BBPromise for metadata
+ */
+exports.parsePrism = function(chtml, callback){
+	return index.parsePrism(chtml).nodeify(callback);
+};
+
+/**
  * Global exportable list of scraping promises with string keys
  * @type {Object}
  */
