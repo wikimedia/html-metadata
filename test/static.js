@@ -65,7 +65,7 @@ describe('static files', function() {
 		});
 	});
 
-	it('should be case insensitive on Turtle Article file', function() {
+	it('should be case insensitive on turtle article file', function() {
 		expected = JSON.parse(fs.readFileSync('./test/static/turtle_article.json'));
 		$ = cheerio.load(fs.readFileSync('./test/static/turtle_article_case.html'));
 		return meta.parseAll($).then(function(results){

@@ -101,12 +101,28 @@ describe('scraping', function() {
 				url: "http://www.lemonde.fr",
 				headers: {
 					'User-Agent': 'webscraper'
-					}
+				}
 			};
 			return preq.get(options).then(function(callRes) {
 				var chtml = cheerio.load(callRes.body);
 				return meta.parseGeneral(chtml).then(function(results) {
 					assert.deepEqual(results.lang, expected);
+				});
+			});
+		});
+
+		it('should get html dir parameter', function() {
+			var expected = "rtl";
+			var options =  {
+				url: "https://www.iranrights.org/fa/",
+				headers: {
+					'User-Agent': 'webscraper'
+				}
+			};
+			return preq.get(options).then(function(callRes) {
+				var chtml = cheerio.load(callRes.body);
+				return meta.parseGeneral(chtml).then(function(results) {
+					assert.deepEqual(results.dir, expected);
 				});
 			});
 		});
