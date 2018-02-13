@@ -50,6 +50,7 @@
 		"authorlink": "http://examples.com/turtlelvr",
 		"canonical": "http://example.com/turtles",
 		"description": "Exposition on the awesomeness of turtles",
+		"dir": "ltr",
 		"icons": [
 			{
 				"href": "turtle.png",

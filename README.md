@@ -106,6 +106,7 @@ The method parseGeneral obtains the following general metadata:
 <link rel="shortlink" href="">
 <title></title>
 <html lang="en">
+<html dir="rtl">
 ```
 
 ## Tests
