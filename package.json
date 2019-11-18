@@ -1,13 +1,13 @@
 {
   "name": "html-metadata",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Scrapes metadata of several different standards",
   "main": "index.js",
   "dependencies": {
-    "bluebird": "3.5.1",
+    "bluebird": "^3.7.1",
     "cheerio": "1.0.0-rc.2",
     "microdata-node": "0.2.1",
-    "preq": "0.5.4"
+    "preq": "^0.5.12"
   },
   "devDependencies": {
     "istanbul": "0.4.5",
