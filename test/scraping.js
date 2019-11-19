@@ -22,13 +22,22 @@ describe('scraping', function() {
 	describe('parseAll function', function() {
 		describe('Resolve parseAll promises for partial metadata', function() {
 			it('should resolve promise from woorank', function() {
-				url = 'http://blog.woorank.com/2013/04/dublin-core-metadata-for-seo-and-usability/';
-				return assert.ok(meta(url));
+				var opts = {
+					uri: 'https://www.woorank.com/en/blog/dublin-core-metadata-for-seo-and-usability',
+					headers: {
+                    	'User-Agent': 'html-metadata'
+					}
+				};
+				return (meta(opts)).catch(function(e) {
+					throw(e);
+				});
 			});
 
 			it('should resolve promise from blog.schema.org', function() {
 				url = 'http://blog.schema.org';
-				return assert.ok(meta(url));
+				return (meta(url)).catch(function(e) {
+					throw(e);
+				});
 			});
 		});
 	});
@@ -140,7 +149,7 @@ describe('scraping', function() {
 					assert.deepEqual(results.author, expectedAuthors); // Compare authors values
 					// Ensure all keys are in response
 					['journal_title', 'issn', 'doi', 'publication_date', 'title', 'author', 'author_institution',
-					 'volume', 'issue', 'firstpage', 'lastpage', 'publisher', 'abstract', 'reference'].forEach(function(key) {
+					 'volume', 'issue', 'firstpage', 'lastpage', 'publisher', 'abstract'].forEach(function(key) {
 						if(!results[key]) {
 							throw new Error('Expected to find the ' + key + ' key in the response!');
 						}
@@ -174,8 +183,11 @@ describe('scraping', function() {
 				return meta.parseOpenGraph(chtml)
 				.catch(function(e){throw e;})
 				.then(function(res) {
-					var expectedImage = '{"url":"https://assets-cdn.github.com/images/modules/open_graph/github-logo.png","type":"image/png","width":"1200","height":"1200"},{"url":"https://assets-cdn.github.com/images/modules/open_graph/github-mark.png","type":"image/png","width":"1200","height":"620"},{"url":"https://assets-cdn.github.com/images/modules/open_graph/github-octocat.png","type":"image/png","width":"1200","height":"620"}';
-					assert.deepEqual(JSON.stringify(res.image), expectedImage);
+					['url', 'type', 'width', 'height'].forEach(function(key) {
+						if(!res.image[0].hasOwnProperty(key)) {
+							throw new Error('Expected to find the ' + key + ' key in the response!');
+						}
+					});
 				});
 			});
 		});
