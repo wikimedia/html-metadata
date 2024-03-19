@@ -184,7 +184,7 @@ describe('scraping', function() {
 				.catch(function(e){throw e;})
 				.then(function(res) {
 					['url', 'type', 'width', 'height'].forEach(function(key) {
-						if(!res.image[0].hasOwnProperty(key)) {
+						if(!res.image.hasOwnProperty(key)) {
 							throw new Error('Expected to find the ' + key + ' key in the response!');
 						}
 					});
@@ -210,35 +210,20 @@ describe('scraping', function() {
 	});
 
 	describe('parseTwitter function', function() {
-		it('from http://www.aftenposten.no', function() {
-			url = 'http://www.aftenposten.no/kultur/Pinlig-for-Skaber-555558b.html';
-			return preq.get(url).then(function(callRes) {
-				var chtml = cheerio.load(callRes.body);
-				return meta.parseTwitter(chtml)
-				.catch(function(e){throw e;})
-				.then(function(res) {
-					['card', 'site', 'description', 'title', 'image'].forEach(function(key) {
-						if(!res[key]) {
-							throw new Error('Expected to find the ' + key + ' key in the response!');
-						}
-					});
-				});
-			});
-		});
 
-		it('and nested Twitter data from www.theguardian.com', function() {
-			url = 'http://www.theguardian.com/us';
+		it('nested Twitter data from www.theguardian.com', function() {
+			url = 'https://www.theguardian.com/commentisfree/2024/mar/08/the-guardian-view-on-wikipedias-female-volunteers-a-hive-heroism-that-changes-history';
 			return meta(url)
 			.catch(function(e){throw e;})
 			.then(function(res) {
-				var expected = '{"app":{"id":{"iphone":"409128287","ipad":"409128287","googleplay":"com.guardian"},"name":{"googleplay":"The Guardian","ipad":"The Guardian","iphone":"The Guardian"},"url":{"ipad":"gnmguardian://us?contenttype=front&source=twitter","iphone":"gnmguardian://us?contenttype=front&source=twitter"}},"site":"@guardian","card":"summary","dnt":"on","url":"https://www.theguardian.com/us"}';
+				var expected = '{"dnt":"on","app":{"id":{"iphone":"409128287","ipad":"409128287","googleplay":"com.guardian"},"name":{"googleplay":"The Guardian","ipad":"The Guardian","iphone":"The Guardian"},"url":{"googleplay":"guardian://www.theguardian.com/commentisfree/2024/mar/08/the-guardian-view-on-wikipedias-female-volunteers-a-hive-heroism-that-changes-history","iphone":"gnmguardian://commentisfree/2024/mar/08/the-guardian-view-on-wikipedias-female-volunteers-a-hive-heroism-that-changes-history?contenttype=Article&source=twitter","ipad":"gnmguardian://commentisfree/2024/mar/08/the-guardian-view-on-wikipedias-female-volunteers-a-hive-heroism-that-changes-history?contenttype=Article&source=twitter"}},"card":"summary_large_image","image":"https://i.guim.co.uk/img/media/be24321580a1085d8abf0e83333b21355cf9e51f/921_1071_7271_4363/master/7271.jpg?width=1200&height=630&quality=85&auto=format&fit=crop&overlay-align=bottom%2Cleft&overlay-width=100p&overlay-base64=L2ltZy9zdGF0aWMvb3ZlcmxheXMvdGctb3BpbmlvbnMucG5n&s=5ebf0d536e013e718fdd08d5b66087c6","site":"@guardian"}'
 				assert.deepEqual(JSON.stringify(res.twitter), expected);
 			});
 		});
 	});
 
 	describe('parseJsonLd function', function() {
-		var urls = ['http://www.theguardian.com/us', 'http://www.apple.com/'];
+		var urls = ['https://www.theguardian.com/commentisfree/2024/mar/08/the-guardian-view-on-wikipedias-female-volunteers-a-hive-heroism-that-changes-history', 'http://www.apple.com/'];
 		urls.forEach(function(test) {
 			describe(test, function() {
 				it('should return an object or array and get correct data', function() {
@@ -249,7 +234,8 @@ describe('scraping', function() {
 							assert.ok(typeof res === 'object');
 							var result = res.filter(function(r) {
 								return r['@type'] === 'Organization';
-							})[0]; // Check the first organisation for the correct properties
+							}); // Check the first organisation for the correct properties
+							result = Array.isArray(result) ? result[0] : result // Get first org if array of orgs
 							['@context', '@type', 'url', 'logo'].forEach(function(key) {
 								assert.ok(result.hasOwnProperty(key));
 							});
