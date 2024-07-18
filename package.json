@@ -10,6 +10,9 @@
     "preq": "^0.5.12"
   },
   "devDependencies": {
+    "@eslint/js": "^9.7.0",
+    "eslint": "^9.7.0",
+    "globals": "^15.8.0",
     "istanbul": "^0.4.5",
     "mocha": "^10.3.0",
     "mocha-jshint": "^2.3.1",
@@ -18,7 +21,9 @@
   },
   "scripts": {
     "test": "mocha",
-    "coverage": "istanbul cover _mocha -- -R spec"
+    "coverage": "istanbul cover _mocha -- -R spec",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
   },
   "engines": {
     "node": ">=12"
