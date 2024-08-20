@@ -1,0 +1,17 @@
+{
+	"root": true,
+	"extends": [
+		"wikimedia/server"
+	],
+	"rules": {
+		"camelcase": "off",
+		"no-console": "off",
+		"no-process-exit": "off",
+		"no-shadow": "off",
+		"no-underscore-dangle": "off",
+		"no-use-before-define": "off",
+		"es-x/no-hashbang": "off",
+		"n/no-process-exit": "off",
+		"jsdoc/newline-after-description": "off"
+	}
+}

@@ -1,55 +1,59 @@
 {
-  "name": "html-metadata",
-  "version": "1.7.2",
-  "description": "Scrapes metadata of several different standards",
-  "main": "index.js",
-  "dependencies": {
-    "bluebird": "^3.7.1",
-    "cheerio": "^1.0.0-rc.10",
-    "microdata-node": "^0.2.1",
-    "preq": "^0.5.12"
-  },
-  "devDependencies": {
-    "istanbul": "^0.4.5",
-    "mocha": "^10.3.0",
-    "mocha-jshint": "^2.3.1",
-    "mocha-lcov-reporter": "^1.3.0",
-    "nock": "^13.3.0"
-  },
-  "scripts": {
-    "test": "mocha",
-    "coverage": "istanbul cover _mocha -- -R spec"
-  },
-  "engines": {
-    "node": ">=12"
-  },
-  "keywords": [
-    "bepress",
-    "coins",
-    "dublin core",
-    "eprints",
-    "highwire press",
-    "json-ld",
-    "open graph",
-    "metadata",
-    "microdata",
-    "prism",
-    "twitter cards",
-    "web scraper"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/wikimedia/html-metadata.git"
-  },
-  "author": "Marielle Volz <marielle.volz@gmail.com>",
-  "contributors": [
-    "Krzysztof Zbudniewek <krzysztof.zbudniewek@gmail.com>",
-    "Geoffrey Mon <geofbot@gmail.com>",
-    "Scimonster <tehalmightyscimonster@gmail.com>"
-  ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/wikimedia/html-metadata/issues"
-  },
-  "homepage": "https://github.com/wikimedia/html-metadata"
+	"name": "html-metadata",
+	"version": "1.7.2",
+	"description": "Scrapes metadata of several different standards",
+	"main": "index.js",
+	"dependencies": {
+		"bluebird": "^3.7.1",
+		"cheerio": "^1.0.0-rc.10",
+		"microdata-node": "^0.2.1",
+		"preq": "^0.5.12"
+	},
+	"devDependencies": {
+		"chai": "^4.3.0",
+		"eslint": "8.56.0",
+		"eslint-config-wikimedia": "0.27.0",
+		"istanbul": "^0.4.5",
+		"mocha": "^10.3.0",
+		"mocha-lcov-reporter": "^1.3.0",
+		"nock": "^13.3.0"
+	},
+	"scripts": {
+		"test": "npm run lint && mocha",
+		"lint": "eslint --cache --max-warnings 0 --ext .js,.json .",
+		"lint:fix": "eslint --fix .",
+		"coverage": "istanbul cover _mocha -- -R spec"
+	},
+	"engines": {
+		"node": ">=12"
+	},
+	"keywords": [
+		"bepress",
+		"coins",
+		"dublin core",
+		"eprints",
+		"highwire press",
+		"json-ld",
+		"open graph",
+		"metadata",
+		"microdata",
+		"prism",
+		"twitter cards",
+		"web scraper"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/wikimedia/html-metadata.git"
+	},
+	"author": "Marielle Volz <marielle.volz@gmail.com>",
+	"contributors": [
+		"Krzysztof Zbudniewek <krzysztof.zbudniewek@gmail.com>",
+		"Geoffrey Mon <geofbot@gmail.com>",
+		"Scimonster <tehalmightyscimonster@gmail.com>"
+	],
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/wikimedia/html-metadata/issues"
+	},
+	"homepage": "https://github.com/wikimedia/html-metadata"
 }
