@@ -43,14 +43,14 @@
 		"description": "A 2008 film about jungle turtles.",
 		"url": "http://example.com",
 		"site_name": "Awesome Turtle Movies Website",
-		"image": [{
+		"image": [ {
 			"url": "http://example.com/turtle.jpg"
 		}, {
 			"url": "http://example.com/shell.jpg"
-		}],
-		"tag": ["turtle", "movie", "awesome"],
+		} ],
+		"tag": [ "turtle", "movie", "awesome" ],
 		"director": "http://www.example.com/PhilTheTurtle",
-		"actor": ["http://www.example.com/PatTheTurtle", "http://www.example.com/SaminaTheTurtle"],
+		"actor": [ "http://www.example.com/PatTheTurtle", "http://www.example.com/SaminaTheTurtle" ],
 		"writer": "http://www.example.com/TinaTheTurtle",
 		"release_date": "2015-01-14T19:14:27+00:00",
 		"duration": "1000000"
@@ -73,11 +73,10 @@
 		}
 	},
 	"prism": {
-			"publicationName": "Turtles of the Jungle",
-			"publicationDate": "2012-02-04",
-			"copyright": "2012 Turtles Society",
-			"rightsAgent": "permissions@turtles.com",
-			"url": "https://www.turtles.com"
+		"publicationName": "Turtles of the Jungle",
+		"publicationDate": "2012-02-04",
+		"copyright": "2012 Turtles Society",
+		"rightsAgent": "permissions@turtles.com",
+		"url": "https://www.turtles.com"
 	}
 }
-

@@ -10,7 +10,7 @@
 		"publisher": "Turtles Society",
 		"online_date": "2012/02/04"
 	},
-	"coins": [{
+	"coins": [ {
 		"ctx_ver": "Z39.88-2004",
 		"rft_id": "info:doi/http://dx.doi.org/10.5555/12345678",
 		"rfr_id": "info:sid/crossref.org:search",
@@ -26,9 +26,9 @@
 			"aufirst": "Josiah",
 			"aulast": "Carberry",
 			"genre": "article",
-			"au": ["Josiah Carberry"]
+			"au": [ "Josiah Carberry" ]
 		}
-	}],
+	} ],
 	"dublinCore": {
 		"title": "Turtles are AWESOME!!1",
 		"creator": "http://www.example.com/turtlelvr",
@@ -84,9 +84,9 @@
 		"abstract": "Exposition on the awesomeness of turtles."
 	},
 	"jsonLd": {
-	  "@context": "http://schema.org",
-	  "@type": "Organization",
-	  "url": "https://www.turtles.com"
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"url": "https://www.turtles.com"
 	},
 	"openGraph": {
 		"locale": "en_US",
@@ -95,7 +95,7 @@
 		"description": "Exposition on the awesomeness of turtles",
 		"url": "http://example.com",
 		"site_name": "Awesome Turtles Website",
-		"image": [{
+		"image": [ {
 			"url": "http://example.com/turtle.jpg",
 			"secure_url": "https://secure.example.com/turtle.jpg",
 			"type": "image/jpeg",
@@ -105,14 +105,14 @@
 			"url": "http://example.com/shell.jpg",
 			"width": "200",
 			"height": "150"
-		}],
+		} ],
 		"audio": {
 			"url": "http://example.com/sound.mp3",
 			"secure_url": "https://secure.example.com/sound.mp3",
 			"type": "audio/mpeg"
 		},
-		"tag": ["turtles", "are", "awesome"],
-		"section": ["Turtles are tough", "Turtles are flawless", "Turtles are cute"],
+		"tag": [ "turtles", "are", "awesome" ],
+		"section": [ "Turtles are tough", "Turtles are flawless", "Turtles are cute" ],
 		"published_time": "2012-02-04T12:00:00+00:00",
 		"modified_time": "2015-01-14T19:14:27+00:00",
 		"author": "http://examples.com/turtlelvr",
@@ -128,7 +128,7 @@
 	"twitter": {
 		"card": "summary",
 		"site": "@Turtlessssssssss",
-		"creator": ["@Turtlessssssssss", "@Turtlezzzzzzzzzz"],
+		"creator": [ "@Turtlessssssssss", "@Turtlezzzzzzzzzz" ],
 		"url": "http://www.example.com/turtles",
 		"title": "Turtles are AWESOME!!1",
 		"description": "Exposition on the awesomeness of turtles",
@@ -158,4 +158,3 @@
 		"doi": "10.1000/123"
 	}
 }
-

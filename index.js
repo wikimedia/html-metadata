@@ -10,12 +10,12 @@
 /*
 Import modules
  */
-var BBPromise = require('bluebird');
-var cheerio = require('cheerio');
-var preq = require('preq'); // Promisified Request library
-var fs = BBPromise.promisifyAll(require('fs'));
+const BBPromise = require( 'bluebird' );
+const cheerio = require( 'cheerio' );
+const preq = require( 'preq' ); // Promisified Request library
+const fs = BBPromise.promisifyAll( require( 'fs' ) );
 
-var index = require('./lib/index.js');
+const index = require( './lib/index.js' );
 
 /**
  * Default exported function that takes a url string or
@@ -26,33 +26,31 @@ var index = require('./lib/index.js');
  * @param  {Function} [callback] Optional callback
  * @return {Object}              BBPromise for metadata
  */
-exports = module.exports = function(urlOrOpts, callback) {
-	return preq.get(urlOrOpts
-	).then(function(response) {
-		return index.parseAll(cheerio.load(response.body));
-	}).nodeify(callback);
+exports = module.exports = function ( urlOrOpts, callback ) {
+	return preq.get( urlOrOpts
+	).then( ( response ) => index.parseAll( cheerio.load( response.body ) ) ).nodeify( callback );
 };
 
 /**
  * Exported function that takes html file and
  * returns a BBPromise for all available metadata
  *
- * @param  {String}   path  	 path Path to HTML file
- * @param  {Object}   [opts]  	 opts Additional options such as encoding
+ * @param  {string}   path       path Path to HTML file
+ * @param  {Object}   [opts]     opts Additional options such as encoding
  * @param  {Function} [callback] Optional callback
  * @return {Object}              BBPromise for metadata
  */
-exports.loadFromFile = function(path, opts, callback) {
-	var defaultEncoding = 'utf-8';
+exports.loadFromFile = function ( path, opts, callback ) {
+	const defaultEncoding = 'utf-8';
 
 	opts = opts || defaultEncoding;
-	if (typeof opts === 'function') {
+	if ( typeof opts === 'function' ) {
 		callback = opts;
 		opts = defaultEncoding;
 	}
 
-	return fs.readFileAsync(path, opts).then(html =>
-		index.parseAll(cheerio.load(html)).nodeify(callback)
+	return fs.readFileAsync( path, opts ).then(
+		( html ) => index.parseAll( cheerio.load( html ) ).nodeify( callback )
 	);
 };
 
@@ -60,12 +58,12 @@ exports.loadFromFile = function(path, opts, callback) {
  * Exported function that takes html string and
  * returns a BBPromise for all available metadata
  *
- * @param  {String}   html  	 html String HTML of the page
+ * @param  {string}   html       html String HTML of the page
  * @param  {Function} [callback] Optional callback
  * @return {Object}              BBPromise for metadata
  */
-exports.loadFromString = function(html, callback) {
-	return index.parseAll(cheerio.load(html)).nodeify(callback);
+exports.loadFromString = function ( html, callback ) {
+	return index.parseAll( cheerio.load( html ) ).nodeify( callback );
 };
 
 /**
@@ -76,8 +74,8 @@ exports.loadFromString = function(html, callback) {
  * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseAll = function(chtml, callback){
-	return index.parseAll(chtml).nodeify(callback);
+exports.parseAll = function ( chtml, callback ) {
+	return index.parseAll( chtml ).nodeify( callback );
 };
 
 /**
@@ -87,8 +85,8 @@ exports.parseAll = function(chtml, callback){
  * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseBEPress = function(chtml, callback){
-	return index.parseBEPress(chtml).nodeify(callback);
+exports.parseBEPress = function ( chtml, callback ) {
+	return index.parseBEPress( chtml ).nodeify( callback );
 };
 
 /**
@@ -98,19 +96,19 @@ exports.parseBEPress = function(chtml, callback){
  * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseCOinS = function(chtml, callback){
-	return index.parseCOinS(chtml).nodeify(callback);
+exports.parseCOinS = function ( chtml, callback ) {
+	return index.parseCOinS( chtml ).nodeify( callback );
 };
 
 /**
  * Parses value of COinS title tag
  *
- * @param  {String}   title      String corresponding to value of title tag in span element
+ * @param  {string}   title      String corresponding to value of title tag in span element
  * @param  {Function} [callback] Optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseCOinSTitle = function(title, callback){
-	return index.parseCOinSTitle(title).nodeify(callback);
+exports.parseCOinSTitle = function ( title, callback ) {
+	return index.parseCOinSTitle( title ).nodeify( callback );
 };
 
 /**
@@ -120,8 +118,8 @@ exports.parseCOinSTitle = function(title, callback){
  * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseDublinCore = function(chtml, callback){
-	return index.parseDublinCore(chtml).nodeify(callback);
+exports.parseDublinCore = function ( chtml, callback ) {
+	return index.parseDublinCore( chtml ).nodeify( callback );
 };
 
 /**
@@ -131,8 +129,8 @@ exports.parseDublinCore = function(chtml, callback){
  * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseEprints = function(chtml, callback){
-	return index.parseEprints(chtml).nodeify(callback);
+exports.parseEprints = function ( chtml, callback ) {
+	return index.parseEprints( chtml ).nodeify( callback );
 };
 
 /**
@@ -142,8 +140,8 @@ exports.parseEprints = function(chtml, callback){
  * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseGeneral = function(chtml, callback){
-	return index.parseGeneral(chtml).nodeify(callback);
+exports.parseGeneral = function ( chtml, callback ) {
+	return index.parseGeneral( chtml ).nodeify( callback );
 };
 
 /**
@@ -153,8 +151,8 @@ exports.parseGeneral = function(chtml, callback){
  * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseHighwirePress = function(chtml, callback){
-	return index.parseHighwirePress(chtml).nodeify(callback);
+exports.parseHighwirePress = function ( chtml, callback ) {
+	return index.parseHighwirePress( chtml ).nodeify( callback );
 };
 
 /**
@@ -164,8 +162,8 @@ exports.parseHighwirePress = function(chtml, callback){
  * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for JSON-LD
  */
-exports.parseJsonLd = function(chtml, callback){
-	return index.parseJsonLd(chtml).nodeify(callback);
+exports.parseJsonLd = function ( chtml, callback ) {
+	return index.parseJsonLd( chtml ).nodeify( callback );
 };
 
 /**
@@ -175,8 +173,8 @@ exports.parseJsonLd = function(chtml, callback){
  * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseOpenGraph = function(chtml, callback){
-	return index.parseOpenGraph(chtml).nodeify(callback);
+exports.parseOpenGraph = function ( chtml, callback ) {
+	return index.parseOpenGraph( chtml ).nodeify( callback );
 };
 
 /**
@@ -186,8 +184,8 @@ exports.parseOpenGraph = function(chtml, callback){
  * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseSchemaOrgMicrodata = function(chtml, callback){
-	return index.parseSchemaOrgMicrodata(chtml).nodeify(callback);
+exports.parseSchemaOrgMicrodata = function ( chtml, callback ) {
+	return index.parseSchemaOrgMicrodata( chtml ).nodeify( callback );
 };
 
 /**
@@ -197,8 +195,8 @@ exports.parseSchemaOrgMicrodata = function(chtml, callback){
  * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseTwitter = function(chtml, callback){
-	return index.parseTwitter(chtml).nodeify(callback);
+exports.parseTwitter = function ( chtml, callback ) {
+	return index.parseTwitter( chtml ).nodeify( callback );
 };
 
 /**
@@ -208,12 +206,13 @@ exports.parseTwitter = function(chtml, callback){
  * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parsePrism = function(chtml, callback){
-	return index.parsePrism(chtml).nodeify(callback);
+exports.parsePrism = function ( chtml, callback ) {
+	return index.parsePrism( chtml ).nodeify( callback );
 };
 
 /**
  * Global exportable list of scraping promises with string keys
+ *
  * @type {Object}
  */
 exports.metadataFunctions = index.metadataFunctions;
@@ -222,4 +221,4 @@ exports.metadataFunctions = index.metadataFunctions;
   Export the version
 */
 
-exports.version = require('./package').version;
+exports.version = require( './package' ).version;
