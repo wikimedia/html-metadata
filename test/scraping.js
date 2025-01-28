@@ -2,7 +2,6 @@
 
 const meta = require( '../index' );
 const assert = require( 'assert' );
-const preq = require( 'preq' );
 const cheerio = require( 'cheerio' );
 
 // mocha defines to avoid eslint breakage
@@ -16,12 +15,15 @@ describe( 'scraping', function () {
 	const acceptHeader = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8';
 
 	function getWithHeaders( url ) {
-		return preq.get( {
-			uri: url,
+		return fetch( url, {
+			method: 'GET',
 			headers: {
 				'User-Agent': userAgent,
 				Accept: acceptHeader
 			}
+		} ).then( ( res ) => {
+			// res.body is a ReadableStream of a Uint8Array, but we just want the string
+			return res.text();
 		} );
 	}
 
@@ -54,11 +56,10 @@ describe( 'scraping', function () {
 	describe( 'parseBEPress function', () => {
 		it( 'should get BE Press metadata tags', () => {
 			const url = 'http://biostats.bepress.com/harvardbiostat/paper154/';
-			return getWithHeaders( url ).then( ( callRes ) => {
+			return getWithHeaders( url ).then( ( body ) => {
 				const expectedAuthors = [ 'Claggett, Brian', 'Xie, Minge', 'Tian, Lu' ];
 				const expectedAuthorInstitutions = [ 'Harvard', 'Rutgers University - New Brunswick/Piscataway', 'Stanford University School of Medicine' ];
-				const chtml = cheerio.load( callRes.body );
-
+				const chtml = cheerio.load( body );
 				return meta.parseBEPress( chtml )
 					.then( ( results ) => {
 						assert.deepStrictEqual( results.author, expectedAuthors );
@@ -78,8 +79,8 @@ describe( 'scraping', function () {
 	describe( 'parseCOinS function', () => {
 		it( 'should get COinS metadata', () => {
 			const url = 'https://en.wikipedia.org/wiki/Viral_phylodynamics';
-			return getWithHeaders( url ).then( ( callRes ) => {
-				const chtml = cheerio.load( callRes.body );
+			return getWithHeaders( url ).then( ( body ) => {
+				const chtml = cheerio.load( body );
 				return meta.parseCOinS( chtml )
 					.then( ( results ) => {
 						assert.ok( Array.isArray( results ), `Expected Array, got ${ typeof results }` );
@@ -93,8 +94,8 @@ describe( 'scraping', function () {
 	describe( 'parseEPrints function', () => {
 		it( 'should get EPrints metadata', () => {
 			const url = 'http://eprints.gla.ac.uk/113711/';
-			return getWithHeaders( url ).then( ( callRes ) => {
-				const chtml = cheerio.load( callRes.body );
+			return getWithHeaders( url ).then( ( body ) => {
+				const chtml = cheerio.load( body );
 				const expectedAuthors = [ 'Gatherer, Derek', 'Kohl, Alain' ];
 
 				return meta.parseEprints( chtml )
@@ -112,8 +113,8 @@ describe( 'scraping', function () {
 		it( 'should get html lang parameter', () => {
 			const expected = 'fr';
 			const url = 'http://www.lemonde.fr';
-			return getWithHeaders( url ).then( ( callRes ) => {
-				const chtml = cheerio.load( callRes.body );
+			return getWithHeaders( url ).then( ( body ) => {
+				const chtml = cheerio.load( body );
 				return meta.parseGeneral( chtml ).then( ( results ) => {
 					assert.strictEqual( results.lang, expected );
 				} );
@@ -123,8 +124,8 @@ describe( 'scraping', function () {
 		it( 'should get html dir parameter', () => {
 			const expected = 'rtl';
 			const url = 'https://www.iranrights.org/fa/';
-			return getWithHeaders( url ).then( ( callRes ) => {
-				const chtml = cheerio.load( callRes.body );
+			return getWithHeaders( url ).then( ( body ) => {
+				const chtml = cheerio.load( body );
 				return meta.parseGeneral( chtml ).then( ( results ) => {
 					assert.strictEqual( results.dir, expected );
 				} );
@@ -134,8 +135,8 @@ describe( 'scraping', function () {
 
 	it( 'should not have any undefined values', () => {
 		const url = 'http://web.archive.org/web/20220127144804/https://www.cnet.com/special-reports/vr101/';
-		return getWithHeaders( url ).then( ( callRes ) => {
-			const chtml = cheerio.load( callRes.body );
+		return getWithHeaders( url ).then( ( body ) => {
+			const chtml = cheerio.load( body );
 			return meta.parseAll( chtml )
 				.then( ( results ) => {
 					Object.keys( results ).forEach( ( metadataType ) => {
