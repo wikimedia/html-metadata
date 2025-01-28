@@ -12,7 +12,6 @@ Import modules
  */
 const BBPromise = require( 'bluebird' );
 const cheerio = require( 'cheerio' );
-const preq = require( 'preq' ); // Promisified Request library
 const fs = BBPromise.promisifyAll( require( 'fs' ) );
 
 const index = require( './lib/index.js' );
@@ -27,8 +26,27 @@ const index = require( './lib/index.js' );
  * @return {Object}              BBPromise for metadata
  */
 exports = module.exports = function ( urlOrOpts, callback ) {
-	return preq.get( urlOrOpts
-	).then( ( response ) => index.parseAll( cheerio.load( response.body ) ) ).nodeify( callback );
+	let url, opts;
+	if ( urlOrOpts instanceof Object ) {
+		if ( urlOrOpts.uri ) {
+			url = urlOrOpts.uri;
+		}
+		opts = urlOrOpts;
+	} else if ( typeof urlOrOpts === String ) {
+		url = urlOrOpts;
+	}
+	if ( !url ) {
+		return BBPromise.reject( 'No uri supplied in argument' ).nodeify( callback );
+	} else {
+		return BBPromise.resolve(
+			fetch( url, opts ).then( ( response ) => {
+				// todo check if either urloropts still works with fetch
+				return response.text().then( ( body ) => {
+					return index.parseAll( cheerio.load( body ) );
+				} );
+			} )
+		).nodeify( callback );
+	}
 };
 
 /**

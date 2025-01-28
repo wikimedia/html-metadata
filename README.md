@@ -42,12 +42,11 @@ The scrape method used here invokes the parseAll() method, which uses all the av
 Promise-based:
 ```js
 var cheerio = require('cheerio');
-var preq = require('preq'); // Promisified request library
 var parseDublinCore = require('html-metadata').parseDublinCore;
 
 var url = "http://blog.woorank.com/2013/04/dublin-core-metadata-for-seo-and-usability/";
 
-preq(url).then(function(response){
+fetch(url).then(function(response){
 	$ = cheerio.load(response.body);
 	return parseDublinCore($).then(function(metadata){
 		console.log(metadata);
