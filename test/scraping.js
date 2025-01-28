@@ -133,7 +133,7 @@ describe( 'scraping', function () {
 	} );
 
 	it( 'should not have any undefined values', () => {
-		const url = 'https://www.cnet.com/special-reports/vr101/';
+		const url = 'http://web.archive.org/web/20220127144804/https://www.cnet.com/special-reports/vr101/';
 		return getWithHeaders( url ).then( ( callRes ) => {
 			const chtml = cheerio.load( callRes.body );
 			return meta.parseAll( chtml )
