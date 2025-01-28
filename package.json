@@ -21,7 +21,7 @@
     "coverage": "istanbul cover _mocha -- -R spec"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=18"
   },
   "keywords": [
     "bepress",
