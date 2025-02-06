@@ -2,7 +2,7 @@
  * https://github.com/wikimedia/html-metadata
  *
  * This file wraps all exportable functions so that they
- * can be used either with Promises or with callbacks.
+ * can be used with Promises.
  */
 
 'use strict';
@@ -18,14 +18,13 @@ const index = require( './lib/index.js' );
 
 /**
  * Default exported function that takes a url string or
- * request library options object and returns a
+ * request library options dictionary and returns a
  * BBPromise for all available metadata
  *
- * @param  {Object}   urlOrOpts  url String or options Object
- * @param  {Function} [callback] Optional callback
+ * @param  {Object}   urlOrOpts  url String or options dictionary
  * @return {Object}              BBPromise for metadata
  */
-exports = module.exports = function ( urlOrOpts, callback ) {
+exports = module.exports = function ( urlOrOpts ) {
 	let url, opts;
 	if ( urlOrOpts instanceof Object ) {
 		if ( urlOrOpts.uri ) {
@@ -36,16 +35,15 @@ exports = module.exports = function ( urlOrOpts, callback ) {
 		url = urlOrOpts;
 	}
 	if ( !url ) {
-		return BBPromise.reject( 'No uri supplied in argument' ).nodeify( callback );
+		return BBPromise.reject( 'No uri supplied in argument' );
 	} else {
 		return BBPromise.resolve(
 			fetch( url, opts ).then( ( response ) => {
-				// todo check if either urloropts still works with fetch
 				return response.text().then( ( body ) => {
 					return index.parseAll( cheerio.load( body ) );
 				} );
 			} )
-		).nodeify( callback );
+		);
 	}
 };
 
@@ -55,33 +53,28 @@ exports = module.exports = function ( urlOrOpts, callback ) {
  *
  * @param  {string}   path       path Path to HTML file
  * @param  {Object}   [opts]     opts Additional options such as encoding
- * @param  {Function} [callback] Optional callback
  * @return {Object}              BBPromise for metadata
  */
-exports.loadFromFile = function ( path, opts, callback ) {
+exports.loadFromFile = function ( path, opts ) {
 	const defaultEncoding = 'utf-8';
 
 	opts = opts || defaultEncoding;
-	if ( typeof opts === 'function' ) {
-		callback = opts;
-		opts = defaultEncoding;
-	}
 
 	return fs.readFileAsync( path, opts ).then(
-		( html ) => index.parseAll( cheerio.load( html ) ).nodeify( callback )
+		( html ) => index.parseAll( cheerio.load( html ) )
 	);
 };
 
 /**
+ * c
  * Exported function that takes html string and
  * returns a BBPromise for all available metadata
  *
  * @param  {string}   html       html String HTML of the page
- * @param  {Function} [callback] Optional callback
  * @return {Object}              BBPromise for metadata
  */
-exports.loadFromString = function ( html, callback ) {
-	return index.parseAll( cheerio.load( html ) ).nodeify( callback );
+exports.loadFromString = function ( html ) {
+	return index.parseAll( cheerio.load( html ) );
 };
 
 /**
@@ -89,143 +82,130 @@ exports.loadFromString = function ( html, callback ) {
  * using the same keys as in metadataFunctions.
  *
  * @param  {Object}   chtml      html Cheerio object to parse
- * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseAll = function ( chtml, callback ) {
-	return index.parseAll( chtml ).nodeify( callback );
+exports.parseAll = function ( chtml ) {
+	return index.parseAll( chtml );
 };
 
 /**
  * Scrapes BE Press metadata given html object
  *
  * @param  {Object}   chtml      html Cheerio object
- * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseBEPress = function ( chtml, callback ) {
-	return index.parseBEPress( chtml ).nodeify( callback );
+exports.parseBEPress = function ( chtml ) {
+	return index.parseBEPress( chtml );
 };
 
 /**
  * Scrapes embedded COinS data given Cheerio loaded html object
  *
  * @param  {Object}   chtml      html Cheerio object
- * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseCOinS = function ( chtml, callback ) {
-	return index.parseCOinS( chtml ).nodeify( callback );
+exports.parseCOinS = function ( chtml ) {
+	return index.parseCOinS( chtml );
 };
 
 /**
  * Parses value of COinS title tag
  *
  * @param  {string}   title      String corresponding to value of title tag in span element
- * @param  {Function} [callback] Optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseCOinSTitle = function ( title, callback ) {
-	return index.parseCOinSTitle( title ).nodeify( callback );
+exports.parseCOinSTitle = function ( title ) {
+	return index.parseCOinSTitle( title );
 };
 
 /**
  * Scrapes Dublin Core data given Cheerio loaded html object
  *
  * @param  {Object}   chtml      html Cheerio object
- * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseDublinCore = function ( chtml, callback ) {
-	return index.parseDublinCore( chtml ).nodeify( callback );
+exports.parseDublinCore = function ( chtml ) {
+	return index.parseDublinCore( chtml );
 };
 
 /**
  * Scrapes EPrints data given Cheerio loaded html object
  *
  * @param  {Object}   chtml      html Cheerio object
- * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseEprints = function ( chtml, callback ) {
-	return index.parseEprints( chtml ).nodeify( callback );
+exports.parseEprints = function ( chtml ) {
+	return index.parseEprints( chtml );
 };
 
 /**
  * Scrapes general metadata terms given Cheerio loaded html object
  *
  * @param  {Object}   chtml      html Cheerio object
- * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseGeneral = function ( chtml, callback ) {
-	return index.parseGeneral( chtml ).nodeify( callback );
+exports.parseGeneral = function ( chtml ) {
+	return index.parseGeneral( chtml );
 };
 
 /**
  * Scrapes Highwire Press metadata given html object
  *
  * @param  {Object}   chtml      html Cheerio object
- * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseHighwirePress = function ( chtml, callback ) {
-	return index.parseHighwirePress( chtml ).nodeify( callback );
+exports.parseHighwirePress = function ( chtml ) {
+	return index.parseHighwirePress( chtml );
 };
 
 /**
  * Retrieves JSON-LD for given html object
  *
  * @param  {Object}   chtml      html Cheerio object
- * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for JSON-LD
  */
-exports.parseJsonLd = function ( chtml, callback ) {
-	return index.parseJsonLd( chtml ).nodeify( callback );
+exports.parseJsonLd = function ( chtml ) {
+	return index.parseJsonLd( chtml );
 };
 
 /**
  * Scrapes OpenGraph data given html object
  *
  * @param  {Object}   chtml      html Cheerio object
- * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseOpenGraph = function ( chtml, callback ) {
-	return index.parseOpenGraph( chtml ).nodeify( callback );
+exports.parseOpenGraph = function ( chtml ) {
+	return index.parseOpenGraph( chtml );
 };
 
 /**
  * Scrapes schema.org microdata given Cheerio loaded html object
  *
  * @param  {Object}   chtml      html Cheerio object
- * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseSchemaOrgMicrodata = function ( chtml, callback ) {
-	return index.parseSchemaOrgMicrodata( chtml ).nodeify( callback );
+exports.parseSchemaOrgMicrodata = function ( chtml ) {
+	return index.parseSchemaOrgMicrodata( chtml );
 };
 
 /**
  * Scrapes Twitter data given html object
  *
  * @param  {Object}   chtml      html Cheerio object
- * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parseTwitter = function ( chtml, callback ) {
-	return index.parseTwitter( chtml ).nodeify( callback );
+exports.parseTwitter = function ( chtml ) {
+	return index.parseTwitter( chtml );
 };
 
 /**
  * Scrapes PRISM data given html object
  *
  * @param  {Object}   chtml      html Cheerio object
- * @param  {Function} [callback] optional callback function
  * @return {Object}              BBPromise for metadata
  */
-exports.parsePrism = function ( chtml, callback ) {
-	return index.parsePrism( chtml ).nodeify( callback );
+exports.parsePrism = function ( chtml ) {
+	return index.parsePrism( chtml );
 };
 
 /**
