@@ -15,16 +15,15 @@ describe( 'scraping', function () {
 	const acceptHeader = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8';
 
 	function getWithHeaders( url ) {
+		// eslint-disable-next-line n/no-unsupported-features/node-builtins
 		return fetch( url, {
 			method: 'GET',
 			headers: {
 				'User-Agent': userAgent,
 				Accept: acceptHeader
 			}
-		} ).then( ( res ) => {
-			// res.body is a ReadableStream of a Uint8Array, but we just want the string
-			return res.text();
-		} );
+		// res.body is a ReadableStream of a Uint8Array, but we just want the string
+		} ).then( ( res ) => res.text() );
 	}
 
 	describe( 'parseAll function', () => {
