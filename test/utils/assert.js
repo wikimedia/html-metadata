@@ -2,7 +2,7 @@
 
 const { use } = require( 'chai' );
 
-module.exports = use( function ( _chai ) {
+module.exports = use( ( _chai ) => {
 	const { assert } = _chai;
 
 	assert.fails = ( promise ) => {

@@ -17,10 +17,9 @@ describe( 'errors', function () {
 	this.timeout( 40000 );
 
 	function fetchBody( url ) {
-		return fetch( url ).then( ( res ) => {
-			// res.body is a ReadableStream of a Uint8Array, but we just want the string
-			return res.text();
-		} );
+		// res.body is a ReadableStream of a Uint8Array, but we just want the string
+		// eslint-disable-next-line n/no-unsupported-features/node-builtins
+		return fetch( url ).then( ( res ) => res.text() );
 	}
 
 	it( 'should not find schema.org metadata, reject promise', () => {

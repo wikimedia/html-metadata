@@ -38,11 +38,12 @@ exports = module.exports = function ( urlOrOpts ) {
 		return BBPromise.reject( 'No uri supplied in argument' );
 	} else {
 		return BBPromise.resolve(
-			fetch( url, opts ).then( ( response ) => {
-				return response.text().then( ( body ) => {
-					return index.parseAll( cheerio.load( body ) );
-				} );
-			} )
+			// eslint-disable-next-line n/no-unsupported-features/node-builtins
+			fetch( url, opts ).then(
+				( response ) => response.text().then(
+					( body ) => index.parseAll( cheerio.load( body ) )
+				)
+			)
 		);
 	}
 };
