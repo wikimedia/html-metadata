@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"dependencies": {
 		"cheerio": "1.0.0-rc.12",
-		"microdata-node": "^0.2.1"
+		"microdata-node": "^2.0.0"
 	},
 	"devDependencies": {
 		"chai": "^4.3.0",
