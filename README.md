@@ -83,4 +83,4 @@ The method parseGeneral obtains the following general metadata:
 
 ## Contributing
 
-Contributions welcome! All contibutions should use [bluebird promises](https://github.com/petkaantonov/bluebird) instead of callbacks.
+Contributions welcome! All contibutions should use [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) instead of callbacks.
