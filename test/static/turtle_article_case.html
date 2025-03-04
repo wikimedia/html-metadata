@@ -145,15 +145,24 @@ Turtle Article containing capitALised tags to test case sensitivity
 
 <body>
 
-<!-- since keys may be case-sensitive in JSON-LD, take the keys as-is -->
-<script type="application/ld+json">{
-	"@context": "http://schema.org",
-	"@type": "Organization",
-	"url": "https://www.turtles.com"
-}
-</script>
+	<!--COINS-->
+	 <span class="Z3988" Title="ctx_ver=Z39.88-2004&amp;RFT_id=info%3Adoi%2Fhttp%3A%2F%2Fdx.doi.org%2F10.5555%2F12345678&amp;rfr_id=info%3Asid%2Fcrossref.org%3Asearch&amp;RFT.aTitle=Toward+a+Unified+Theory+of+High-Energy+Metaphysics%3A+Silly+String+Theory&amp;RFT.jTitle=Journal+of+Psychoceramics&amp;RFT.Date=2008&amp;RFT.Volume=5&amp;RFT.issue=11&amp;RFT.Spage=1&amp;RFT.Epage=3&amp;RFT.Aufirst=Josiah&amp;RFT.Aulast=Carberry&amp;RFT_vAL_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;RFT.Genre=Article&amp;RFT.Au=Josiah+Carberry"></span>
 
- <span class="Z3988" Title="ctx_ver=Z39.88-2004&amp;RFT_id=info%3Adoi%2Fhttp%3A%2F%2Fdx.doi.org%2F10.5555%2F12345678&amp;rfr_id=info%3Asid%2Fcrossref.org%3Asearch&amp;RFT.aTitle=Toward+a+Unified+Theory+of+High-Energy+Metaphysics%3A+Silly+String+Theory&amp;RFT.jTitle=Journal+of+Psychoceramics&amp;RFT.Date=2008&amp;RFT.Volume=5&amp;RFT.issue=11&amp;RFT.Spage=1&amp;RFT.Epage=3&amp;RFT.Aufirst=Josiah&amp;RFT.Aulast=Carberry&amp;RFT_vAL_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;RFT.Genre=Article&amp;RFT.Au=Josiah+Carberry"></span>
+	<!--Schema.org Microdata: Case sensitive-->
+	<div itemscope>
+		<h1 itemprop="headline">Turtles are AWESOME!!1</h1> <!--Uses text from inside tags-->
+		<span itemprop="wordCount" content="10" />  <!--Self-closing tag-->
+		<span itemprop="author" content="Turtle Lvr">Turtle H8r</span> 	<!--Prefers content attr to text inside tags-->
+		<a href="http://www.archive.org/turtlearticle" itemprop="archivedAt">Turtle Article Archive</a>  <!--Uses href and not text between tags-->
+	</div>
+
+	<!-- Since keys may be case-sensitive in JSON-LD, take the keys as-is -->
+	<script type="application/ld+json">{
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"url": "https://www.turtles.com"
+	}
+	</script>
 
 </body>
 

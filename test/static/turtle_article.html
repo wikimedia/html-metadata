@@ -143,26 +143,37 @@
 
 <body>
 
- <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_id=info%3Adoi%2Fhttp%3A%2F%2Fdx.doi.org%2F10.5555%2F12345678&amp;rfr_id=info%3Asid%2Fcrossref.org%3Asearch&amp;rft.atitle=Toward+a+Unified+Theory+of+High-Energy+Metaphysics%3A+Silly+String+Theory&amp;rft.jtitle=Journal+of+Psychoceramics&amp;rft.date=2008&amp;rft.volume=5&amp;rft.issue=11&amp;rft.spage=1&amp;rft.epage=3&amp;rft.aufirst=Josiah&amp;rft.aulast=Carberry&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.au=Josiah+Carberry"></span>
+	<!--COINS-->
+	<span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_id=info%3Adoi%2Fhttp%3A%2F%2Fdx.doi.org%2F10.5555%2F12345678&amp;rfr_id=info%3Asid%2Fcrossref.org%3Asearch&amp;rft.atitle=Toward+a+Unified+Theory+of+High-Energy+Metaphysics%3A+Silly+String+Theory&amp;rft.jtitle=Journal+of+Psychoceramics&amp;rft.date=2008&amp;rft.volume=5&amp;rft.issue=11&amp;rft.spage=1&amp;rft.epage=3&amp;rft.aufirst=Josiah&amp;rft.aulast=Carberry&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.au=Josiah+Carberry"></span>
 
-<script type="application/ld+json">{
-	"@context": "http://schema.org",
-	"@type": "Organization",
-	"url": "https://www.turtles.com"
-}
-</script>
-<!-- ignored -->
-<script type="application/ld+json">
-{
-	"@id": "https://www.turtles.com/"
-	"potentialAction" / {
-		"@type": "ViewAction",
-		"target": "android-app://com.turtles/"
-	},
-	"@type": "WebPage",
-	"@context": "http://schema.org"
-}
-</script>
+	<!--Schema.org Microdata-->
+	<div itemscope>
+		<h1 itemprop="headline">Turtles are AWESOME!!1</h1> <!--Uses text from inside tags-->
+		<span itemprop="wordCount" content="10" />  <!--Self-closing tag-->
+		<span itemprop="author" content="Turtle Lvr">Turtle H8r</span> 	<!--Prefers content attr to text inside tags-->
+		<a href="http://www.archive.org/turtlearticle" itemprop="archivedAt">Turtle Article Archive</a>  <!--Uses href and not text between tags-->
+	</div>
+
+	<!--Valid JSON-LD-->
+	<script type="application/ld+json">{
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"url": "https://www.turtles.com"
+	}
+	</script>
+
+	<!-- Invalid JSON-LD: ignored -->
+	<script type="application/ld+json">
+	{
+		"@id": "https://www.turtles.com/"
+		"potentialAction" / {
+			"@type": "ViewAction",
+			"target": "android-app://com.turtles/"
+		},
+		"@type": "WebPage",
+		"@context": "http://schema.org"
+	}
+	</script>
 
 </body>
 

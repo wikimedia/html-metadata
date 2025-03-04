@@ -156,5 +156,26 @@
 		"rightsAgent": "permissions@turtles.com",
 		"url": "https://www.turtles.com",
 		"doi": "10.1000/123"
+	},
+	"schemaOrg": {
+		"items": [
+			{
+				"properties": {
+					"archivedAt": [
+						"http://www.archive.org/turtlearticle"
+					],
+					"headline": [
+						"Turtles are AWESOME!!1"
+					],
+					"author": [
+						"Turtle Lvr"
+					],
+					"wordCount": [
+						"10"
+					]
+				}
+			}
+		]
 	}
+
 }
