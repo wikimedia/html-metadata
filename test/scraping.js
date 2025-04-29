@@ -27,7 +27,7 @@ describe( 'scraping', function () {
 	}
 
 	describe( 'parseAll function', () => {
-		it( 'should resolve promise from woorank', () => {
+		it( 'should resolve promise from woorank with headers', () => {
 			const url = 'https://www.woorank.com/en/blog/dublin-core-metadata-for-seo-and-usability';
 			return meta( { uri: url, headers: { 'User-Agent': userAgent, Accept: acceptHeader } } )
 				.then( ( result ) => {
@@ -39,9 +39,9 @@ describe( 'scraping', function () {
 				} );
 		} );
 
-		it( 'should resolve promise from blog.schema.org', () => {
+		it( 'should resolve promise from blog.schema.org without headers', () => {
 			const url = 'http://blog.schema.org';
-			return meta( { uri: url, headers: { 'User-Agent': userAgent, Accept: acceptHeader } } )
+			return meta( url )
 				.then( ( result ) => {
 					assert.ok( result, 'Expected result to be truthy' );
 				} )
@@ -50,6 +50,39 @@ describe( 'scraping', function () {
 					throw e;
 				} );
 		} );
+
+		it( 'should throw error if no uri supplied', () => meta()
+			.then( () => {
+				assert.fail( 'Should have rejected the promise' );
+			} )
+			.catch( ( e ) => {
+				assert.ok( e instanceof Error, 'Error should be an Error object' );
+				assert.strictEqual( e.message, 'No uri supplied in argument', 'Error message should match expected message' );
+			} )
+		);
+
+		it( 'should support await implementation with headers', async () => {
+			const url = 'http://blog.schema.org';
+			const result = await meta( { uri: url, headers: { 'User-Agent': userAgent, Accept: acceptHeader } } );
+			assert.ok( result, 'Expected result to be truthy' );
+		} );
+
+		it( 'should support await implementation without headers', async () => {
+			const url = 'http://blog.schema.org';
+			const result = await meta( url );
+			assert.ok( result, 'Expected result to be truthy' );
+		} );
+
+		it( 'should throw error if no uri is supplied with async/await', async () => {
+			try {
+				await meta();
+				assert.fail( 'Should have thrown an error' );
+			} catch ( e ) {
+				assert.ok( e instanceof Error, 'Error should be an Error object' );
+				assert.strictEqual( e.message, 'No uri supplied in argument', 'Error message should match expected message' );
+			}
+		} );
+
 	} );
 
 	describe( 'parseBEPress function', () => {

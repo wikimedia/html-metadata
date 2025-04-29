@@ -30,11 +30,11 @@ exports = module.exports = function ( urlOrOpts ) {
 				url = urlOrOpts.uri;
 			}
 			opts = urlOrOpts;
-		} else if ( typeof urlOrOpts === String ) {
+		} else if ( typeof urlOrOpts === 'string' ) {
 			url = urlOrOpts;
 		}
 		if ( !url ) {
-			reject( 'No uri supplied in argument' );
+			reject( new Error( 'No uri supplied in argument' ) );
 		} else {
 			resolve(
 				// eslint-disable-next-line n/no-unsupported-features/node-builtins
