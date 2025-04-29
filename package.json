@@ -1,6 +1,6 @@
 {
 	"name": "html-metadata",
-	"version": "3.0.0",
+	"version": "3.0.1",
 	"description": "Scrapes metadata of several different standards",
 	"main": "index.js",
 	"dependencies": {
