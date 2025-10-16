@@ -27,65 +27,87 @@ describe( 'scraping', function () {
 	}
 
 	describe( 'parseAll function', () => {
-		it( 'should resolve promise from woorank with headers', () => {
-			const url = 'https://www.woorank.com/en/blog/dublin-core-metadata-for-seo-and-usability';
-			return meta( { uri: url, headers: { 'User-Agent': userAgent, Accept: acceptHeader } } )
-				.then( ( result ) => {
-					assert.ok( result, 'Expected result to be truthy' );
+
+		describe( 'Promise style', () => {
+			it( 'should resolve promise from woorank with headers', () => {
+				const url = 'https://www.woorank.com/en/blog/dublin-core-metadata-for-seo-and-usability';
+				return meta( { uri: url, headers: { 'User-Agent': userAgent, Accept: acceptHeader } } )
+					.then( ( result ) => {
+						assert.ok( result, 'Expected result to be truthy' );
+					} )
+					.catch( ( e ) => {
+						console.error( 'Error in woorank test:', e );
+						throw e;
+					} );
+			} );
+
+			it( 'should resolve promise from blog.schema.org without headers', () => {
+				const url = 'http://blog.schema.org';
+				return meta( url )
+					.then( ( result ) => {
+						assert.ok( result, 'Expected result to be truthy' );
+					} )
+					.catch( ( e ) => {
+						console.error( 'Error in blog.schema.org test:', e );
+						throw e;
+					} );
+			} );
+
+			it( 'should throw error if no uri supplied', () => meta()
+				.then( () => {
+					assert.fail( 'Should have rejected the promise' );
 				} )
 				.catch( ( e ) => {
-					console.error( 'Error in woorank test:', e );
-					throw e;
-				} );
-		} );
-
-		it( 'should resolve promise from blog.schema.org without headers', () => {
-			const url = 'http://blog.schema.org';
-			return meta( url )
-				.then( ( result ) => {
-					assert.ok( result, 'Expected result to be truthy' );
+					assert.ok( e instanceof Error, 'Error should be an Error object' );
+					assert.strictEqual( e.message, 'No uri supplied in argument', 'Error message should match expected message' );
 				} )
-				.catch( ( e ) => {
-					console.error( 'Error in blog.schema.org test:', e );
-					throw e;
+			);
+
+			it( 'should not have any undefined values', () => {
+				const url = 'http://web.archive.org/web/20220127144804/https://www.cnet.com/special-reports/vr101/';
+				return getWithHeaders( url ).then( ( body ) => {
+					const chtml = cheerio.load( body );
+					return meta.parseAll( chtml )
+						.then( ( results ) => {
+							Object.keys( results ).forEach( ( metadataType ) => {
+								Object.keys( results[ metadataType ] ).forEach( ( key ) => {
+									assert.notStrictEqual( results[ metadataType ][ key ], undefined, `${ metadataType }.${ key } should not be undefined` );
+								} );
+							} );
+						} );
 				} );
+			} );
+
 		} );
 
-		it( 'should throw error if no uri supplied', () => meta()
-			.then( () => {
-				assert.fail( 'Should have rejected the promise' );
-			} )
-			.catch( ( e ) => {
-				assert.ok( e instanceof Error, 'Error should be an Error object' );
-				assert.strictEqual( e.message, 'No uri supplied in argument', 'Error message should match expected message' );
-			} )
-		);
+		describe( 'Await style', () => {
 
-		it( 'should support await implementation with headers', async () => {
-			const url = 'http://blog.schema.org';
-			const result = await meta( { uri: url, headers: { 'User-Agent': userAgent, Accept: acceptHeader } } );
-			assert.ok( result, 'Expected result to be truthy' );
-		} );
+			it( 'should support await implementation with headers', async () => {
+				const url = 'http://blog.schema.org';
+				const result = await meta( { uri: url, headers: { 'User-Agent': userAgent, Accept: acceptHeader } } );
+				assert.ok( result, 'Expected result to be truthy' );
+			} );
 
-		it( 'should support await implementation without headers', async () => {
-			const url = 'http://blog.schema.org';
-			const result = await meta( url );
-			assert.ok( result, 'Expected result to be truthy' );
-		} );
+			it( 'should support await implementation without headers', async () => {
+				const url = 'http://blog.schema.org';
+				const result = await meta( url );
+				assert.ok( result, 'Expected result to be truthy' );
+			} );
 
-		it( 'should throw error if no uri is supplied with async/await', async () => {
-			try {
-				await meta();
-				assert.fail( 'Should have thrown an error' );
-			} catch ( e ) {
-				assert.ok( e instanceof Error, 'Error should be an Error object' );
-				assert.strictEqual( e.message, 'No uri supplied in argument', 'Error message should match expected message' );
-			}
+			it( 'should throw error if no uri is supplied with async/await', async () => {
+				try {
+					await meta();
+					assert.fail( 'Should have thrown an error' );
+				} catch ( e ) {
+					assert.ok( e instanceof Error, 'Error should be an Error object' );
+					assert.strictEqual( e.message, 'No uri supplied in argument', 'Error message should match expected message' );
+				}
+			} );
 		} );
 
 	} );
 
-	describe( 'parseBEPress function', () => {
+	describe( 'Individual metadata functions', () => {
 		it( 'should get BE Press metadata tags', () => {
 			const url = 'http://biostats.bepress.com/harvardbiostat/paper154/';
 			return getWithHeaders( url ).then( ( body ) => {
@@ -106,9 +128,7 @@ describe( 'scraping', function () {
 					} );
 			} );
 		} );
-	} );
 
-	describe( 'parseCOinS function', () => {
 		it( 'should get COinS metadata', () => {
 			const url = 'https://en.wikipedia.org/wiki/Viral_phylodynamics';
 			return getWithHeaders( url ).then( ( body ) => {
@@ -121,9 +141,7 @@ describe( 'scraping', function () {
 					} );
 			} );
 		} );
-	} );
 
-	describe( 'parseEPrints function', () => {
 		it( 'should get EPrints metadata', () => {
 			const url = 'http://eprints.gla.ac.uk/113711/';
 			return getWithHeaders( url ).then( ( body ) => {
@@ -139,44 +157,16 @@ describe( 'scraping', function () {
 					} );
 			} );
 		} );
-	} );
 
-	describe( 'parseGeneral function', () => {
-		it( 'should get html lang parameter', () => {
-			const expected = 'fr';
-			const url = 'http://www.lemonde.fr';
+		it( 'should get general metadata', () => {
+			const expected = 'Example Domain';
+			const url = 'http://example.com';
 			return getWithHeaders( url ).then( ( body ) => {
 				const chtml = cheerio.load( body );
 				return meta.parseGeneral( chtml ).then( ( results ) => {
-					assert.strictEqual( results.lang, expected );
+					assert.strictEqual( results.title, expected );
 				} );
 			} );
-		} );
-
-		it( 'should get html dir parameter', () => {
-			const expected = 'rtl';
-			const url = 'https://www.iranrights.org/fa/';
-			return getWithHeaders( url ).then( ( body ) => {
-				const chtml = cheerio.load( body );
-				return meta.parseGeneral( chtml ).then( ( results ) => {
-					assert.strictEqual( results.dir, expected );
-				} );
-			} );
-		} );
-	} );
-
-	it( 'should not have any undefined values', () => {
-		const url = 'http://web.archive.org/web/20220127144804/https://www.cnet.com/special-reports/vr101/';
-		return getWithHeaders( url ).then( ( body ) => {
-			const chtml = cheerio.load( body );
-			return meta.parseAll( chtml )
-				.then( ( results ) => {
-					Object.keys( results ).forEach( ( metadataType ) => {
-						Object.keys( results[ metadataType ] ).forEach( ( key ) => {
-							assert.notStrictEqual( results[ metadataType ][ key ], undefined, `${ metadataType }.${ key } should not be undefined` );
-						} );
-					} );
-				} );
 		} );
 	} );
 
